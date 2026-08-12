@@ -4,20 +4,25 @@ on:
   push:
     branches: [master]
 
+
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
+    runs-on: ubuntu-slim
+    steps:      
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install and Build
         run: |
+          echo "Realizando Install e Build do projeto..."
           npm install
           npm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: 'build'
+          folder: build
           branch: gh-pages
