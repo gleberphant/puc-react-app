@@ -1,0 +1,11 @@
+{
+  "name": "Meu Debian NODE",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "image": "meu-debian-node-image:latest",
+  "runArgs": [
+    "--name",
+    "meu-debian-node-container"
+  ]
+}
