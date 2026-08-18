@@ -12,17 +12,15 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-slim
     steps:      
-      - name: Checkout
-        uses: actions/checkout@v5
-
       - name: Install and Build
+        working-directory: app-react
         run: |
-          echo "Realizando Install e Build do projeto..."
+          echo "Instalação dependencias e Build aplicação REACT..."
           npm install
           npm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build
+          folder: app-react/build
           branch: gh-pages
