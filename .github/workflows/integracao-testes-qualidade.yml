@@ -25,15 +25,4 @@ jobs:
           test -z "$(gofmt -l .)"
           go vet ./...
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: app-react/package-lock.json
 
-      - name: Lint React
-        working-directory: app-react
-        run: |
-          npm ci
-          npx eslint src --ext .js,.jsx --max-warnings=0

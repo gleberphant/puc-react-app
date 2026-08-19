@@ -18,7 +18,7 @@ jobs:
         working-directory: app-react
         run: |
           echo "Instalação dependencias e Build aplicação REACT..."
-          npm ci
+          npm install
           npm run build
 
       - name: Deploy para GitHub-Pages
