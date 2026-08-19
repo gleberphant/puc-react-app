@@ -7,19 +7,29 @@ import (
 	"github.com/gleberphant/puc-react-app/api-go/controladores"
 )
 
+type AppConfig struct {
+	AMBIENTE string
+	PORTA    string
+}
+
 func main() {
 
-	roteador := http.NewServeMux()
-	roteador.HandleFunc("/", controladores.Index)
-	roteador.HandleFunc("/sobre", controladores.Sobre)
-
-	servidor := http.Server{
-		Addr:    ":8080",
-		Handler: roteador,
+	app := AppConfig{
+		AMBIENTE: "dev",
+		PORTA:    "8080",
 	}
 
-	servidor.ListenAndServe()
+	servidor := http.Server{
+		Addr:    app.PORTA,
+		Handler: controladores.ConfiguraRotas(),
+	}
 
-	log.Println("Starting API server...")
+	log.Printf("\n Starting API server. Ambiente %s \n", app.AMBIENTE)
+
+	if err := servidor.ListenAndServe(); err != nil {
+		log.Printf("\n Erro no servidor api... %v", err.Error())
+	}
+
+	log.Println("Finalizando ...")
 
 }

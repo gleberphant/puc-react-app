@@ -1,3 +1,5 @@
+#esse conteiner é para buildar e rodar a aplicação react
+
 FROM node:alpine
 
 WORKDIR /app

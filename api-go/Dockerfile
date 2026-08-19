@@ -1,3 +1,4 @@
+#esse conteiner é para buildar e rodar o backend golang
 FROM golang:1.26-trixie
 
 WORKDIR /app
