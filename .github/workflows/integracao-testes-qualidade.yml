@@ -1,0 +1,28 @@
+# Action para linter e testes de Integração
+name: Testes de Integração
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  qualidade-codigo:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configurar Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: api-go/go.mod
+
+      - name: Lint Go
+        working-directory: api-go
+        run: |
+          test -z "$(gofmt -l .)"
+          go vet ./...
+
+

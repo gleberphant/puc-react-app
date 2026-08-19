@@ -1,9 +1,8 @@
-name: Deploy to GitHub Pages
+name: Build e Deploy para GitHub Pages
 
 on:
   push:
     branches: [master]
-
 
 permissions:
   contents: write
@@ -11,15 +10,18 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-slim
-    steps:      
-      - name: Install and Build
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Build do App-React
         working-directory: app-react
         run: |
           echo "Instalação dependencias e Build aplicação REACT..."
           npm install
           npm run build
 
-      - name: Deploy
+      - name: Deploy para GitHub-Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: app-react/build
