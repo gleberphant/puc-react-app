@@ -20,7 +20,7 @@ func main() {
 	}
 
 	servidor := http.Server{
-		Addr:    ":8080",
+		Addr:    app.PORTA,
 		Handler: controladores.ConfiguraRotas(),
 	}
 
