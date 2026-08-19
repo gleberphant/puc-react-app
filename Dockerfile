@@ -29,3 +29,12 @@ EXPOSE 3000 8080 22
 
 # Script inline para iniciar o sshd e manter o container ativo com bash
 CMD ["/bin/bash", "-c", "/usr/sbin/sshd && exec bash"]
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs
+
+EXPOSE 3000 8080 22
+
+CMD ["bash"]
+
+
