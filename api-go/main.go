@@ -8,22 +8,28 @@ import (
 )
 
 type AppConfig struct {
-	env      string
-	servidor http.Server
+	AMBIENTE string
+	PORTA    string
 }
 
 func main() {
 
 	app := AppConfig{
-		env: "dev",
-		servidor: http.Server{
-			Addr:    ":8080",
-			Handler: controladores.ConfiguraRotas(),
-		},
+		AMBIENTE: "dev",
+		PORTA:    "8080",
 	}
 
-	app.servidor.ListenAndServe()
+	servidor := http.Server{
+		Addr:    ":8080",
+		Handler: controladores.ConfiguraRotas(),
+	}
 
-	log.Println("Starting API server...")
+	log.Printf("\n Starting API server. Ambiente %s \n", app.AMBIENTE)
+
+	if err := servidor.ListenAndServe(); err != nil {
+		log.Printf("\n Erro no servidor api... %v", err.Error())
+	}
+
+	log.Println("Finalizando ...")
 
 }
