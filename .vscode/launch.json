@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "run Golang HTTP Server",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/api-go/main.go"
+    },
+    {
+      "name": "Iniciar Express",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/api-node/main.js",
+      "restart": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug React (Client)",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/app-react/src"
+    }
+  ]
+}

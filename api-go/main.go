@@ -13,10 +13,9 @@ type AppConfig struct {
 }
 
 func main() {
-
 	app := AppConfig{
 		AMBIENTE: "dev",
-		PORTA:    "8080",
+		PORTA:    ":8080",
 	}
 
 	servidor := http.Server{
@@ -31,5 +30,4 @@ func main() {
 	}
 
 	log.Println("Finalizando ...")
-
 }
