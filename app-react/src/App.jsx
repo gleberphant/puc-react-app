@@ -1,19 +1,23 @@
+import MainPage from "./paginas/MainPage";
+import LoginPage from "./paginas/LoginPage";
 import { useState } from "react";
-import { Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const [usuarioAutenticado, SetUsuarioAutenticado] = useState(true);
 
-  return (
-    <>
-      <section id="center">
-        <div>
-          <Button variant="primary">Button as link</Button>
-        </div>
-      </section>
-    </>
-  );
+  const fazerLogin = (token) => {
+    localStorage.setItem("token", token);
+    SetUsuarioAutenticado(true);
+  };
+
+  const fazerLogout = () => {
+    localStorage.removeItem("token");
+    SetUsuarioAutenticado(false);
+  };
+
+  if (usuarioAutenticado) {
+    return <MainPage callbackFazerLogout={fazerLogout} />;
+  } else {
+    return <LoginPage callbackSetToken={fazerLogin} />;
+  }
 }
-
-export default App;
