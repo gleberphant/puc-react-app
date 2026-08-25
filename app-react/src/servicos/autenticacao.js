@@ -1,35 +1,64 @@
-import { fazerRequisao } from "./api";
+const REQUEST_URL = "http://localhost:4000/login";
 
-// service cuida apenas de lógica. não retorna visual
+// function mockRequest(login, senha) {
+//   for (const usuario of mockUsuario) {
+//     if (login === usuario.email && senha === usuario.senha)
+//       return {
+//         ok: true,
+//         body: { token: "token-teste" },
+//         status: 200,
+//       };
+//   }
+//   return {
+//     ok: true,
+//     body: { error: "usuário não autorizado" },
+//     status: 403,
+//   };
+// }
 
-export async function fazerLogin(email, senha) {
-  // fazer requisição no backend
+async function requestAutenticacao(login, senha) {
+  //const response = mockRequest
 
-  console.log(`Fazendo login com login ${email} e senha  ${senha} \n`);
-  const requisicao = fazerRequisao("/login", {
-    email: email,
-    senha: senha,
+  const resposta = await fetch(REQUEST_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      login: login,
+      senha: senha,
+    }),
   });
 
-  // serviço fora do ar
-  if (!requisicao.ok) {
-    const error = "Serviço Offline";
-    return [false, error];
+  // status diferente de 200
+  if (!resposta.ok) {
+    const error = ` ${resposta.status}: ${(await resposta.json()).error}`;
+    return [null, error];
   }
 
-  // converte resposta em json
-  const resposta = requisicao;
+  const body = await resposta.json();
 
-  // objeto de retorno invalido
-  if (resposta.token == null) {
-    const error = "Acesso negado. Login ou Senha inválidos";
-    return [false, error];
+  return [body, null];
+}
+
+// service cuida apenas de lógica. não retorna visual
+export async function fazerLogin(login, senha) {
+  console.log("fazendo log in");
+
+  const [resBody, err] = await requestAutenticacao(login, senha);
+
+  if (err != null) {
+    return `${err}`;
+  }
+
+  if (resBody.token == null) {
+    return `Token inválido`;
   }
 
   //  sucesso então armazena token no local Storage
-  localStorage.setItem("token", resposta.token);
+  localStorage.setItem("token", resBody.token);
 
-  return [true, null];
+  return null;
 }
 
 // fazer logout
@@ -38,11 +67,6 @@ export function fazerLogout() {
   localStorage.removeItem("token");
 }
 
-export function verToken() {
-  console.log(`Token ${localStorage.getItem("token")}`);
-  return localStorage.getItem("token");
-}
-
 export function estaAutenticado() {
-  return verToken() == null ? false : true;
+  return localStorage.getItem("token") == null ? false : true;
 }

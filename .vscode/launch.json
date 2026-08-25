@@ -9,7 +9,7 @@
       "program": "${workspaceFolder}/api-go/main.go"
     },
     {
-      "name": "Iniciar Express",
+      "name": "Iniciar Node Express",
       "type": "node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
@@ -18,9 +18,9 @@
       "console": "integratedTerminal"
     },
     {
-      "type": "chrome",
+      "type": "msedge",
       "request": "launch",
-      "name": "Debug React (Client)",
+      "name": "React App (Client)",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/app-react/src"
     }
