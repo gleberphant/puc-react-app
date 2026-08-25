@@ -1,35 +1,50 @@
-import { fazerRequisao } from "./api";
+import { mockUsuario } from "../repositorios/mockUsuarios";
 
 // service cuida apenas de lógica. não retorna visual
+export function fazerLogin(email, senha) {
+  // simula requisção do backend
+  console.log("fazendo log in");
+  let resposta;
 
-export async function fazerLogin(email, senha) {
-  // fazer requisição no backend
-
-  console.log(`Fazendo login com login ${email} e senha  ${senha} \n`);
-  const requisicao = fazerRequisao("/login", {
-    email: email,
-    senha: senha,
-  });
+  for (const usuario of mockUsuario)
+    if (email === usuario.email && senha === usuario.senha)
+      resposta = {
+        ok: true,
+        body: { token: "token-teste" },
+        status: 200,
+      };
+    else
+      resposta = {
+        ok: true,
+        body: { error: "usuário não autorizado" },
+        status: 403,
+      };
 
   // serviço fora do ar
-  if (!requisicao.ok) {
+  if (!resposta.ok) {
     const error = "Serviço Offline";
-    return [false, error];
+    return error;
   }
 
-  // converte resposta em json
-  const resposta = requisicao;
+  // extrai corpo do resultado
+  const body = resposta.body;
 
-  // objeto de retorno invalido
-  if (resposta.token == null) {
-    const error = "Acesso negado. Login ou Senha inválidos";
-    return [false, error];
+  // status diferente de 200 - usuario não autorizado
+  if (resposta.status != 200) {
+    const error = body.error;
+    return error;
+  }
+
+  // status de retorno 200 . Porem o token foi inválido
+  if (body.token == null) {
+    const error = "Token Inválido";
+    return error;
   }
 
   //  sucesso então armazena token no local Storage
   localStorage.setItem("token", resposta.token);
 
-  return [true, null];
+  return null;
 }
 
 // fazer logout
@@ -38,11 +53,6 @@ export function fazerLogout() {
   localStorage.removeItem("token");
 }
 
-export function verToken() {
-  console.log(`Token ${localStorage.getItem("token")}`);
-  return localStorage.getItem("token");
-}
-
 export function estaAutenticado() {
-  return verToken() == null ? false : true;
+  return localStorage.getItem("token") == null ? false : true;
 }
