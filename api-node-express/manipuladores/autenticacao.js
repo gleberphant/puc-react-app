@@ -23,7 +23,7 @@ function login_post(req, res) {
 
   //usuario não encontrado
   if (usuario == null) {
-    return res.status(401).send({ error: "usuario não encontrado" });
+    return res.status(401).json({ error: "usuario não encontrado" });
   }
 
   // usuario encontrado. cria o token jwt

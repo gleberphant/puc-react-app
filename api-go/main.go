@@ -4,26 +4,24 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gleberphant/puc-react-app/api-go/controladores"
+	"github.com/gleberphant/puc-react-app/api-go/intermediarios"
+	"github.com/gleberphant/puc-react-app/api-go/manipuladores"
 )
 
-type AppConfig struct {
-	AMBIENTE string
-	PORTA    string
-}
+const (
+	AMBIENTE string = "dev"
+	PORTA    string = ":4000"
+)
 
 func main() {
-	app := AppConfig{
-		AMBIENTE: "dev",
-		PORTA:    ":8080",
-	}
+	handlerComCORS := intermediarios.CorsMiddleware(manipuladores.ConfiguraRotas())
 
 	servidor := http.Server{
-		Addr:    app.PORTA,
-		Handler: controladores.ConfiguraRotas(),
+		Addr:    PORTA,
+		Handler: handlerComCORS,
 	}
 
-	log.Printf("\n Starting API server. Ambiente %s \n", app.AMBIENTE)
+	log.Printf("\n Starting API server. Ambiente %s \n", AMBIENTE)
 
 	if err := servidor.ListenAndServe(); err != nil {
 		log.Printf("\n Erro no servidor api... %v", err.Error())
