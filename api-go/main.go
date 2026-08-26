@@ -14,7 +14,11 @@ const (
 )
 
 func main() {
-	handlerComCORS := intermediarios.CorsMiddleware(manipuladores.ConfiguraRotas())
+	handlerComCORS := intermediarios.LogMidleware(
+		intermediarios.AuthMidleware(
+			intermediarios.CorsMiddleware(manipuladores.ConfiguraRotas()),
+		),
+	)
 
 	servidor := http.Server{
 		Addr:    PORTA,
