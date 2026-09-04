@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gleberphant/puc-react-app/api-go/repositorios"
+	"github.com/gleberphant/puc-react-app/api-go/servicos"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -40,18 +40,9 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var usuarioEncontrado bool = false
-
-	// verifica se usuario existe
-	for _, v := range repositorios.MockUsuarioDB {
-		if v.Login == requestBody.Login && v.Senha == requestBody.Senha {
-			// usuario existe
-			usuarioEncontrado = true
-			break
-		}
-	}
-
-	if !usuarioEncontrado {
+	// verifica login e senha; se retornar error o usuario não é autorizado
+	err = servicos.VerificaLoginSenha(requestBody.Login, requestBody.Senha)
+	if err != nil {
 		res.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(res).Encode(map[string]string{"error": "Usuario não autorizado"})
 		return
