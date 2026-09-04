@@ -1,0 +1,32 @@
+.app-card{
+width: "100%";
+ maxWidth: "1024px" 
+}
+
+
+.app-navbar {
+  background-color: #0b1f3a;
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.app-navbar .navbar-brand,
+.app-navbar .nav-link {
+  color: #ffffff;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus {
+  color: #b8d4f0;
+}
+
+
+
+.app-footer {
+  background-color: #0b1f3a;
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  border-radius: 0 0 0.75rem 0.75rem;
+}

@@ -9,7 +9,12 @@ func ConfiguraRotas() *http.ServeMux {
 
 	roteador.HandleFunc("/", PageIndex)
 	roteador.HandleFunc("/sobre", PageSobre)
-	roteador.HandleFunc("/usuarios", PageUsuarios)
+	roteador.HandleFunc("/usuarios", ListarUsuarios)
+	roteador.HandleFunc("GET /usuarios", ListarUsuarios)
+	roteador.HandleFunc("POST /usuarios", CriarUsuarios)
+	roteador.HandleFunc("GET /usuarios/{uid}", ExibirUsuarios)
+	roteador.HandleFunc("PUT /usuarios/{uid}", EditarUsuarios)
+	roteador.HandleFunc("DELETE /usuarios/{uid}", DeletarUsuarios)
 	roteador.HandleFunc("POST /login", LoginPost)
 	return roteador
 }

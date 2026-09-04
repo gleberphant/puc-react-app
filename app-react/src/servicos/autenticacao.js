@@ -1,44 +1,34 @@
 const REQUEST_URL = "http://localhost:4000/login";
 
-// function mockRequest(login, senha) {
-//   for (const usuario of mockUsuario) {
-//     if (login === usuario.email && senha === usuario.senha)
-//       return {
-//         ok: true,
-//         body: { token: "token-teste" },
-//         status: 200,
-//       };
-//   }
-//   return {
-//     ok: true,
-//     body: { error: "usuário não autorizado" },
-//     status: 403,
-//   };
-// }
-
 async function requestAutenticacao(login, senha) {
-  //const response = mockRequest
+  try {
+    console.log("Fazendo request em:", REQUEST_URL);
+    const resposta = await fetch(REQUEST_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ login, senha }),
+    });
 
-  const resposta = await fetch(REQUEST_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      login: login,
-      senha: senha,
-    }),
-  });
+    // status diferente de 200
+    if (!resposta.ok) {
+      console.log(
+        "Status Code: ",
+        resposta.status,
+        "Error:",
+        resposta.statusText,
+      );
+      return [null, "Não foi possível conectar com a API"];
+    }
 
-  // status diferente de 200
-  if (!resposta.ok) {
-    const error = ` ${resposta.status}: ${(await resposta.json()).error}`;
-    return [null, error];
+    const body = await resposta.json();
+
+    return [body, null];
+  } catch (err) {
+    console.log(err);
+    return [null, "Não foi possível conectar com a API"];
   }
-
-  const body = await resposta.json();
-
-  return [body, null];
 }
 
 // service cuida apenas de lógica. não retorna visual
@@ -68,5 +58,6 @@ export function fazerLogout() {
 }
 
 export function estaAutenticado() {
+  console.log("Verificando autenticação");
   return localStorage.getItem("token") == null ? false : true;
 }

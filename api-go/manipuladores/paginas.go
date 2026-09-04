@@ -9,7 +9,3 @@ func PageIndex(res http.ResponseWriter, req *http.Request) {
 func PageSobre(res http.ResponseWriter, req *http.Request) {
 	res.Write([]byte("Pagesobre"))
 }
-
-func PageUsuarios(res http.ResponseWriter, req *http.Request) {
-	res.Write([]byte("listar usuarios"))
-}

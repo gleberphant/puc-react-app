@@ -7,35 +7,11 @@ import (
 )
 
 func VerificaLoginSenha(login string, senha string) error {
-	// verifica se o login existe
-	var loginExiste bool = false
-	for _, u := range repositorios.GetRepositorio() {
-		if u.Login == login {
-			loginExiste = true
-			break
+	for _, usuario := range repositorios.RepositorioUsuariosMock() {
+		if usuario.Login == login && usuario.Senha == senha {
+			return nil
 		}
 	}
 
-	if !loginExiste {
-		return errors.New("Login inválido")
-	}
-
-	// criptografar senha
-	senhaCriptografada := senha
-
-	// verificar senha existe
-	var senhaValida bool = false
-	for _, u := range repositorios.GetRepositorio() {
-		if u.Senha == senhaCriptografada {
-			// usuario existe
-			senhaValida = true
-			break
-		}
-	}
-
-	if !senhaValida {
-		return errors.New("Senha inválida")
-	}
-
-	return nil
+	return errors.New("login ou senha invalidos")
 }

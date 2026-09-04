@@ -3,13 +3,18 @@ FROM golang:1.26-trixie
 
 WORKDIR /app
 
-COPY . .
+# copia source to dest
+
+COPY go.mod go.sum ./
 
 RUN go mod download
 
+
+COPY . .
+
 RUN go build -o main .
 
-EXPOSE 8080
+EXPOSE 4000
 
 CMD ["./main"]
 

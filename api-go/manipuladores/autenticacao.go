@@ -10,8 +10,8 @@ import (
 )
 
 // devolve o formulario
-func LoginGet(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("formulario login"))
+func LoginGet(res http.ResponseWriter, req *http.Request) {
+	res.Write([]byte("formulario login"))
 }
 
 // recebe login e senha no body da requisição

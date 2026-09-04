@@ -7,7 +7,7 @@ import (
 	"github.com/gleberphant/puc-react-app/api-go/repositorios"
 )
 
-var repoUsuario []modelos.Usuario = repositorios.GetRepositorio()
+var repoUsuario []modelos.Usuario = repositorios.RepositorioUsuariosMock()
 
 func CriarUsuarios(novoUsuario modelos.Usuario) error {
 	if novoUsuario.Uid == "" {

@@ -2,22 +2,27 @@ import { useState } from "react";
 import { Container, Card, Button, Form } from "react-bootstrap";
 import { fazerLogin } from "../servicos/autenticacao";
 
-const handleSubmit = async (login, senha, event) => {
-  event.preventDefault();
-
-  const err = await fazerLogin(login, senha);
-
-  if (err != null) {
-    alert(err);
-    return;
-  }
-
-  window.location.reload();
-};
-
 export default function LoginPage() {
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    setCarregando(true);
+
+    const err = await fazerLogin(login, senha);
+
+    setCarregando(false);
+
+    if (err != null) {
+      alert(err);
+      return;
+    }
+
+    window.location.reload();
+  };
 
   return (
     <Container className="d-flex align-items-center justify-content-center min-vh-100">
@@ -27,7 +32,7 @@ export default function LoginPage() {
       >
         <h4 className="text-center mb-4">Acesso ao Sistema</h4>
 
-        <Form onSubmit={(e) => handleSubmit(login, senha, e)}>
+        <Form onSubmit={(e) => handleSubmit(e)}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -54,8 +59,8 @@ export default function LoginPage() {
             <Form.Check type="checkbox" label="Não sou robô" required />
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="w-100">
-            Enviar
+          <Button disabled={carregando} variant="primary" type="submit">
+            {carregando ? "Entrando..." : "Entrar"}
           </Button>
         </Form>
       </Card>
