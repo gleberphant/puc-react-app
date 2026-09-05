@@ -1,9 +1,8 @@
-Desenvolvimento de uma API REST Segura para Gestão de Usuários
+# Desenvolvimento de uma API REST Segura para Gestão de Usuários
+
+> Ao final da atividade, espera-se que você desenvolva e apresente uma aplicação funcional que demonstre a implementação de operações CRUD (criação, consulta, atualização e exclusão) de usuários, a autenticação por meio de JWT (JSON Web Token), o controle de acesso baseado em perfis de usuário (Administrador, Operador e Cliente) e a proteção adequada dos endpoints da aplicação. Além disso, a solução deve evidenciar a aplicação de boas práticas de segurança no desenvolvimento de APIs, bem como a compreensão dos conceitos relacionados ao protocolo OAuth 2.0 e à análise de riscos envolvidos nos processos de autenticação e autorização.
 
  
-
-Uma startup está desenvolvendo um sistema web para gerenciamento de usuários e precisa disponibilizar uma API REST segura para integração com aplicações parceiras.
-
 Como desenvolvedor(a), sua missão será criar uma solução completa que permita cadastrar, consultar, atualizar e excluir usuários, aplicando os conceitos estudados ao longo da disciplina sobre:
 
 APIs REST;

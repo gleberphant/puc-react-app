@@ -9,6 +9,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+func InjetarRotasLogin(roteador *http.ServeMux) {
+	roteador.HandleFunc("GET /login", LoginPost)
+	roteador.HandleFunc("POST /login", LoginPost)
+}
+
 // devolve o formulario
 func LoginGet(res http.ResponseWriter, req *http.Request) {
 	res.Write([]byte("formulario login"))

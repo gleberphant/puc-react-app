@@ -14,9 +14,14 @@ const (
 )
 
 func main() {
+	roteador := http.NewServeMux()
+
+	manipuladores.InjetarRotasLogin(roteador)
+	manipuladores.InjetarRotasPage(roteador)
+
 	handlerComCORS := intermediarios.LogMidleware(
 		intermediarios.AuthMidleware(
-			intermediarios.CorsMiddleware(manipuladores.ConfiguraRotas()),
+			intermediarios.CorsMiddleware(roteador),
 		),
 	)
 
