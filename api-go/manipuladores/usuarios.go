@@ -8,6 +8,21 @@ import (
 	"github.com/gleberphant/puc-react-app/api-go/servicos"
 )
 
+func InjetarRotasUsuarios(roteador *http.ServeMux) {
+	// create
+	roteador.HandleFunc("POST /usuario", CriarUsuarios)
+
+	// read
+	roteador.HandleFunc("GET /usuarios", ListarUsuarios)
+	roteador.HandleFunc("GET /usuario/{uid}", ExibirUsuarios)
+
+	// update
+	roteador.HandleFunc("PUT /usuario/{uid}", EditarUsuarios)
+
+	// delete
+	roteador.HandleFunc("DELETE /usuario/{uid}", DeletarUsuarios)
+}
+
 // CRUD DA ENTISDADE USUARIO
 
 // endpoint CRIAR usuario em json - POST

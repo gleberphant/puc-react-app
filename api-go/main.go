@@ -18,6 +18,7 @@ func main() {
 
 	manipuladores.InjetarRotasLogin(roteador)
 	manipuladores.InjetarRotasPage(roteador)
+	manipuladores.InjetarRotasUsuarios(roteador)
 
 	handlerComCORS := intermediarios.LogMidleware(
 		intermediarios.AuthMidleware(
