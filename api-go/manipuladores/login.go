@@ -2,6 +2,7 @@ package manipuladores
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -10,27 +11,10 @@ import (
 )
 
 func InjetarRotasLogin(roteador *http.ServeMux) {
-	roteador.HandleFunc("GET /login", LoginPost)
 	roteador.HandleFunc("POST /login", LoginPost)
 }
 
-// devolve o formulario
-func LoginGet(res http.ResponseWriter, req *http.Request) {
-	res.Write([]byte("formulario login"))
-}
-
-// recebe login e senha no body da requisição
-// verifica se usuairo existe
-// devolve jwt
-
 func LoginPost(res http.ResponseWriter, req *http.Request) {
-	// Limita o body a 1MB para não travar servidor
-	req.Body = http.MaxBytesReader(res, req.Body, 1048576)
-	defer req.Body.Close()
-
-	// define o header da resposta
-	res.Header().Set("Content-Type", "application/json")
-
 	// define struct que vai receber o request
 	var requestBody struct {
 		Login string `json:"login"`
@@ -40,13 +24,15 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 	// extrai login e senha do body
 	err := json.NewDecoder(req.Body).Decode(&requestBody)
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
-	// verifica login e senha; se retornar error o usuario não é autorizado
+	// chama o service
 	err = servicos.VerificaLoginSenha(requestBody.Login, requestBody.Senha)
+	// confirmação do service
 	if err != nil {
 		res.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(res).Encode(map[string]string{"error": "Usuario não autorizado"})
@@ -62,13 +48,16 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 			"iat":    time.Now().Unix(),
 		})
 
+	// transforma em strings
 	tokenString, err := tokenJwt.SignedString([]byte("minha-senha-secreta"))
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
+		json.NewEncoder(res).Encode(map[string]string{"error": "Erro ao gerar Token "})
 		return
 	}
 
+	// responde ao cliente
 	res.WriteHeader(http.StatusOK)
 	json.NewEncoder(res).Encode(map[string]string{"origin": "go", "token": tokenString})
 }

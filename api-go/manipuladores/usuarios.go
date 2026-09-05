@@ -2,6 +2,7 @@ package manipuladores
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gleberphant/puc-react-app/api-go/modelos"
@@ -36,17 +37,12 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Perfil string `json:"perfil"`
 	}
 
-	// agenda fechamento do body Request para liiberar recursos
-	defer req.Body.Close()
-
-	// limita tamanho do body Request para a 1MB para não travar servidor
-	req.Body = http.MaxBytesReader(res, req.Body, 1048576)
-
 	// extrai JSON do body Request
 	err := json.NewDecoder(req.Body).Decode(&requestBody)
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
+		json.NewEncoder(res).Encode(map[string]string{"error": "requisição inválida"})
 		return
 	}
 
@@ -58,69 +54,132 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Nome:   requestBody.Nome,
 		Perfil: requestBody.Perfil,
 	})
+	// confirmação do service
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
+		json.NewEncoder(res).Encode(map[string]string{"error": "falha no serviço"})
 		return
 	}
 
-	// ESCREVE RESPOSTA COM A  CONFIRMAÇÃO
-	res.Header().Set("Content-Type", "application/json")
+	// enviar resposta para cliente
 	res.WriteHeader(http.StatusOK)
 	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
 }
 
 // endpoint LISTAR usuario em json
 func ListarUsuarios(res http.ResponseWriter, req *http.Request) {
-	// chamar service para listar ususarios
+	// chama service
 	lista, err := servicos.ListarUsuarios()
+	// confirmação  do service
 	if err != nil {
-		res.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(res).Encode(map[string]string{"error": "falha no serviço"})
 		return
 	}
 
-	// ESCREVE RESPOSTA COM A  CONFIRMAÇÃO
-	res.Header().Set("Content-Type", "application/json")
+	// escreve resposta para cliente
 	res.WriteHeader(http.StatusOK)
 	json.NewEncoder(res).Encode(map[string][]modelos.Usuario{"usuarios": lista})
 }
 
 // endpoint EXIBIR usuario em json
 func ExibirUsuarios(res http.ResponseWriter, req *http.Request) {
-	// chamar service para exibir ususario por id
+	// extrair o json do body
+	var requestBody struct {
+		Uid string `json:"uid"`
+	}
 
-	// receber usuario
-	// ESCREVE RESPOSTA COM A  CONFIRMAÇÃO
-	res.Header().Set("Content-Type", "application/json")
+	err := json.NewDecoder(req.Body).Decode(&requestBody)
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(res).Encode(map[string]string{"error": "falha na requisição"})
+		return
+	}
+
+	// chama service
+	usuario, err := servicos.ExibirUsuario(requestBody.Uid)
+	// confirmação  do service
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(res).Encode(map[string]string{"error": "Usuário não encontrado"})
+		return
+	}
+
+	// escreve resposta para cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
+	json.NewEncoder(res).Encode(map[string]modelos.Usuario{"usuario": *usuario})
 }
 
 // endpoint EDITAR usuario em json
 func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
-	// receber dados no body
+	// definir estrutura que vai recebcer o json
+	var requestBody struct {
+		Uid    string `json:"uid"`
+		Login  string `json:"login"`
+		Senha  string `json:"senha"`
+		Nome   string `json:"nome"`
+		Perfil string `json:"perfil"`
+	}
 
-	// chamar service apra editar usuario por id
+	// extrarir o json do body
+	err := json.NewDecoder(req.Body).Decode(&requestBody)
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(res).Encode(map[string]string{"error": "Não foi possível editar o usuário"})
+	}
 
-	// receber confirmação de edição do service
+	// chamar service
+	err = servicos.EditarUsuarios(modelos.Usuario{
+		Uid:    requestBody.Uid,
+		Login:  requestBody.Login,
+		Senha:  requestBody.Senha,
+		Nome:   requestBody.Nome,
+		Perfil: requestBody.Perfil,
+	})
+	// confirmação  do service
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(res).Encode(map[string]string{"error": "Não foi possível editar o usuário"})
+		return
+	}
 
-	// ESCREVE RESPOSTA COM A  CONFIRMAÇÃO
-	res.Header().Set("Content-Type", "application/json")
+	// escreve resposta para cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
+	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario editado com sucesso"})
 }
 
 // endpoint DELETAR usuario em json
 func DeletarUsuarios(res http.ResponseWriter, req *http.Request) {
-	// receber id do usuario alvo
+	// extrai json do body
+
+	var requestBody struct {
+		Uid string `json:"uid"`
+	}
+
+	err := json.NewDecoder(req.Body).Decode(&requestBody)
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(res).Encode(map[string]string{"error": "falha na requisição"})
+	}
 
 	// chamar service para deletar usuario por id
+	err = servicos.DeletarUsuarios(requestBody.Uid)
+	// confirmação  do service
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
+		res.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(res).Encode(map[string]string{"error": "falha no serviço"})
+		return
+	}
 
-	// receber confirmação de edição do service
-
-	// ESCREVE RESPOSTA COM A  CONFIRMAÇÃO
-	res.Header().Set("Content-Type", "application/json")
+	// escreve resposta para cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
+	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario deletado com sucesso"})
 }
