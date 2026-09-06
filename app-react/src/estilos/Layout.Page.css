@@ -1,27 +1,33 @@
-.app-conteiner {
+:root {
+  --app-dark: #1b2636;
+  --app-light: #ffffff;
+  --app-hover: crimson;
+}
+
+.app-container {
   width: 80vw;
   height: 80vh;
-  max-width: none;
   padding: 0;
   margin: 10vh auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-card {
   width: 100%;
+  max-width: 800px;
   height: 100%;
+  max-height: 600px;
   display: flex;
   flex-direction: column;
-  padding: 0;
   border: 0;
 }
 
-.app-card .app-header {
-  background-color: rgba(27, 38, 54, 1);
-  color: white;
-}
-
-.app-header .navbar {
-  width: 100%;
+.app-header,
+.app-footer {
+  color: var(--app-light);
+  background-color: var(--app-dark);
 }
 
 .app-header .navbar-brand {
@@ -29,22 +35,37 @@
 }
 
 .app-header .nav-link {
-  color: white;
+  color: var(--app-light);
 }
 
 .app-header .nav-link:hover {
-  background-color: crimson;
   color: black;
+  background-color: var(--app-hover);
 }
 
-.app-card .app-body {
+.app-navbar .navbar-toggler {
+  border-color: var(--app-dark);
+}
+
+.app-navbar .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 20, 60, 0.35);
+}
+
+.app-navbar .navbar-toggler-icon {
+
+  border-color: rgba(220, 20, 60, 0.35);
+color: rgba(220, 20, 60, 0.35);
+}
+
+
+.app-navbar .navbar-toggler:hover {
+  box-shadow: 0 0 0 0.2rem crimson;
+}
+
+.app-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  background-color: white;
   color: black;
-}
-
-.app-card .app-footer {
-  background-color: rgba(27, 38, 54, 1);
-  color: white;
+  background-color: var(--app-light);
 }
