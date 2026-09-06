@@ -26,21 +26,20 @@ export async function fazerLogin(login, senha) {
       return ["Não foi possível conectar com a API", null];
     }
 
-    const bodyResposta = await resposta.json();
+    const responseBody = await resposta.json();
 
-    if (bodyResposta.token == null) {
+    if (responseBody.token == null) {
       ["Token Inválido", null];
     }
 
     //  sucesso então armazena token no local Storage
-    console.log("body retornado:", bodyResposta);
+    console.log("body retornado:", responseBody);
 
-    localStorage.setItem("token", bodyResposta.token);
-    localStorage.setItem("usuario", bodyResposta.usuario);
+    localStorage.setItem("token", responseBody.token);
+    localStorage.setItem("usuario", responseBody.usuario);
 
-    const usuario = bodyResposta.usuario;
+    return [responseBody.usuario, null];
 
-    return [usuario, null];
   } catch (err) {
     console.log(err);
     return ["Não foi possível conectar com a API", null];

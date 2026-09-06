@@ -21,7 +21,7 @@
   max-height: 600px;
   display: flex;
   flex-direction: column;
-  border: 0;
+  border: 1;
 }
 
 .app-header,
