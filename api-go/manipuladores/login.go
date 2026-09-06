@@ -31,9 +31,10 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// chama o service
-	err = servicos.VerificaLoginSenha(requestBody.Login, requestBody.Senha)
+	usuarioLogado, err := servicos.VerificaLoginSenha(requestBody.Login, requestBody.Senha)
 	// confirmação do service
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(res).Encode(map[string]string{"error": "Usuario não autorizado"})
 		return
@@ -59,5 +60,14 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 
 	// responde ao cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]string{"origin": "go", "token": tokenString})
+
+	/* 	responseBody := struct {
+	   		usuario map[string]string
+	   		token   string
+	   	}{
+	   		usuario: usuarioLogado,
+	   		token:   tokenString,
+	   	}
+	*/
+	json.NewEncoder(res).Encode(map[string]any{"usuario": usuarioLogado, "token": tokenString})
 }

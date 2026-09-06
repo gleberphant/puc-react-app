@@ -9,14 +9,14 @@ import { Outlet } from "react-router-dom";
 import { Cabecalho } from "../componentes/Cabecalho";
 import { Rodape } from "../componentes/Rodape";
 
-export default function LayoutPage() {
+export default function LayoutPage({ logout, usuario }) {
   return (
     <>
       <Container fluid className="app-container">
         {/** Cabeçalho da aplicação */}
         <Card className="app-card">
           <Card.Header className="app-header">
-            <Cabecalho />
+            <Cabecalho logout={logout} usuario={usuario} />
           </Card.Header>
           {/** Corpo da aplicação */}
           <Card.Body className="app-body">

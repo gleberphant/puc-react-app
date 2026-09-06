@@ -34,11 +34,20 @@
   font-weight: bold;
 }
 
-.app-header .nav-link {
-  color: var(--app-light);
+.app-header .navbar-nav {
+  gap: 24px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
-.app-header .nav-link:hover {
+.app-header .nav-link {
+  color: var(--app-light);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.app-header .nav-link:hover,
+.nav-item:hover {
   color: black;
   background-color: var(--app-hover);
 }
@@ -52,11 +61,9 @@
 }
 
 .app-navbar .navbar-toggler-icon {
-
   border-color: rgba(220, 20, 60, 0.35);
-color: rgba(220, 20, 60, 0.35);
+  color: rgba(220, 20, 60, 0.35);
 }
-
 
 .app-navbar .navbar-toggler:hover {
   box-shadow: 0 0 0 0.2rem crimson;

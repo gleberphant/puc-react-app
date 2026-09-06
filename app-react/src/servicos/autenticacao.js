@@ -1,8 +1,17 @@
 const REQUEST_URL = "http://localhost:4000/login";
 
-async function requestAutenticacao(login, senha) {
+export let UsuarioLogado = {
+  uid: "",
+  nome: "",
+  email: "",
+  perfil: "",
+};
+
+// faz o request api/login e armazena o jwt no local storage
+export async function fazerLogin(login, senha) {
   try {
-    console.log("Fazendo request em:", REQUEST_URL);
+    console.log("Fazendo login request em:", REQUEST_URL);
+
     const resposta = await fetch(REQUEST_URL, {
       method: "POST",
       headers: {
@@ -11,53 +20,35 @@ async function requestAutenticacao(login, senha) {
       body: JSON.stringify({ login, senha }),
     });
 
-    // status diferente de 200
+    // se status diferente de 200
     if (!resposta.ok) {
-      console.log(
-        "Status Code: ",
-        resposta.status,
-        "Error:",
-        resposta.statusText,
-      );
-      return [null, "Não foi possível conectar com a API"];
+      console.log("Error:", resposta.statusText);
+      return ["Não foi possível conectar com a API", null];
     }
 
-    const body = await resposta.json();
+    const bodyResposta = await resposta.json();
 
-    return [body, null];
+    if (bodyResposta.token == null) {
+      ["Token Inválido", null];
+    }
+
+    //  sucesso então armazena token no local Storage
+    console.log("body retornado:", bodyResposta);
+
+    localStorage.setItem("token", bodyResposta.token);
+    localStorage.setItem("usuario", bodyResposta.usuario);
+
+    const usuario = bodyResposta.usuario;
+
+    return [usuario, null];
   } catch (err) {
     console.log(err);
-    return [null, "Não foi possível conectar com a API"];
+    return ["Não foi possível conectar com a API", null];
   }
-}
-
-// service cuida apenas de lógica. não retorna visual
-export async function fazerLogin(login, senha) {
-  console.log("fazendo log in");
-
-  const [resBody, err] = await requestAutenticacao(login, senha);
-
-  if (err != null) {
-    return `${err}`;
-  }
-
-  if (resBody.token == null) {
-    return `Token inválido`;
-  }
-
-  //  sucesso então armazena token no local Storage
-  localStorage.setItem("token", resBody.token);
-
-  return null;
 }
 
 // fazer logout
 export function fazerLogout() {
   console.log("fazendo log out");
   localStorage.removeItem("token");
-}
-
-export function estaAutenticado() {
-  console.log("Verificando autenticação");
-  return localStorage.getItem("token") == null ? false : true;
 }

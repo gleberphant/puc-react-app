@@ -1,18 +1,53 @@
-import { estaAutenticado } from "./servicos/autenticacao.js";
+// estilos
+import "./estilos/App.css";
 
+// dependencias
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { fazerLogin, fazerLogout } from "./servicos/autenticacao.js";
+
+// minhas paginas
 import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LayoutPage from "./paginas/Layout.Page.jsx";
-
-import "./estilos/App.css";
+import { CadastroUsuarioPage } from "./paginas/Cadastro.Page.jsx";
+import { ListarUsuariosPage } from "./paginas/Usuarios.Page.jsx";
+import SobrePage from "./paginas/Sobre.Page.jsx";
 export default function App() {
-  if (estaAutenticado() == true)
+  const [logado, setLogado] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState({});
+  const [carregando, setCarregando] = useState(false);
+
+  const logout = () => {
+    fazerLogout();
+    setLogado(false);
+  };
+
+  const login = async (login, senha) => {
+    setCarregando(true);
+    const [usuario, err] = await fazerLogin(login, senha);
+
+    if (err != null) {
+      alert(err);
+      return;
+    }
+
+    setUsuarioLogado(usuario);
+    setCarregando(false);
+    setLogado(true);
+  };
+  if (carregando) return <>Carregando</>;
+  if (logado)
     return (
       <BrowserRouter>
         <Routes>
-          <Route element={<LayoutPage />}>
+          <Route
+            element={<LayoutPage logout={logout} usuario={usuarioLogado} />}
+          >
             <Route path="/" element={<HomePage />} />
+            <Route path="/sobre" element={<SobrePage />} />
+            <Route path="/usuarios" element={<ListarUsuariosPage />} />
+            <Route path="/cadastro" element={<CadastroUsuarioPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
@@ -20,7 +55,7 @@ export default function App() {
   else
     return (
       <>
-        <LoginPage />
+        <LoginPage login={login} />
       </>
     );
 }

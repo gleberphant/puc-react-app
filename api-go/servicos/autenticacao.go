@@ -6,12 +6,19 @@ import (
 	"github.com/gleberphant/puc-react-app/api-go/repositorios"
 )
 
-func VerificaLoginSenha(login string, senha string) error {
+func VerificaLoginSenha(login string, senhaTexto string) (map[string]string, error) {
+	senha := senhaTexto
+
 	for _, usuario := range repositorios.RepositorioUsuariosMock() {
 		if usuario.Login == login && usuario.Senha == senha {
-			return nil
+			return map[string]string{
+				"Uid":    usuario.Uid,
+				"Nome":   usuario.Nome,
+				"Email":  usuario.Login,
+				"Perfil": usuario.Perfil,
+			}, nil
 		}
 	}
 
-	return errors.New("login ou senha invalidos")
+	return nil, errors.New("login ou senha invalidos")
 }

@@ -1,27 +1,14 @@
-import { useState } from "react";
 import { Container, Card, Button, Form } from "react-bootstrap";
-import { fazerLogin } from "../servicos/autenticacao";
 
-export default function LoginPage() {
-  const [login, setLogin] = useState("");
-  const [senha, setSenha] = useState("");
-  const [carregando, setCarregando] = useState(false);
+export default function LoginPage({ login }) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+    const f = new FormData(e.target);
 
-    setCarregando(true);
+    console.log("email", f.get("login"), "senha", f.get("senha"));
 
-    const err = await fazerLogin(login, senha);
-
-    setCarregando(false);
-
-    if (err != null) {
-      alert(err);
-      return;
-    }
-
-    window.location.reload();
+    login(f.get("login"), f.get("senha"));
   };
 
   return (
@@ -36,10 +23,9 @@ export default function LoginPage() {
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
-              type="email"
-              value={login}
-              placeholder="Digite seu email"
-              onChange={(e) => setLogin(e.target.value)}
+              name="login"
+              type="text"
+              placeholder="Digite seu Login"
               required
             />
           </Form.Group>
@@ -47,10 +33,9 @@ export default function LoginPage() {
           <Form.Group className="mb-3" controlId="formGroupSenha">
             <Form.Label>Senha</Form.Label>
             <Form.Control
+              name="senha"
               type="password"
-              value={senha}
               placeholder="Password"
-              onChange={(e) => setSenha(e.target.value)}
               required
             />
           </Form.Group>
@@ -59,8 +44,8 @@ export default function LoginPage() {
             <Form.Check type="checkbox" label="Não sou robô" required />
           </Form.Group>
 
-          <Button disabled={carregando} variant="primary" type="submit">
-            {carregando ? "Entrando..." : "Entrar"}
+          <Button variant="primary" type="submit">
+            Entrar
           </Button>
         </Form>
       </Card>
