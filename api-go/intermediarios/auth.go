@@ -1,6 +1,7 @@
 package intermediarios
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -8,7 +9,16 @@ import (
 
 func AuthMidleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/login" || req.Method == http.MethodOptions {
+			log.Printf("rota do login")
+			next.ServeHTTP(res, req)
+			return
+		}
+
+		log.Printf("buscando autorização")
 		authorization := req.Header.Get("Authorization")
+
+		log.Printf("Token: %s", authorization)
 
 		if authorization == "" {
 			http.Error(res, "Token ausente", http.StatusUnauthorized)

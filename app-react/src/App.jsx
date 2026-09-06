@@ -11,10 +11,10 @@ import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
 import LayoutPage from "./paginas/Layout.Page.jsx";
 import { CadastroUsuarioPage } from "./paginas/Cadastro.Page.jsx";
-import { ListarUsuariosPage } from "./paginas/Usuarios.Page.jsx";
+import { ListarUsuariosPage } from "./paginas/ListaUsuarios.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
 export default function App() {
-  const [logado, setLogado] = useState(false);
+  const [logado, setLogado] = useState(true);
   const [usuarioLogado, setUsuarioLogado] = useState({});
   const [carregando, setCarregando] = useState(false);
 
@@ -25,10 +25,10 @@ export default function App() {
 
   const login = async (login, senha) => {
     setCarregando(true);
-    const [usuario, err] = await fazerLogin(login, senha);
+    const usuario = await fazerLogin(login, senha);
 
-    if (err != null) {
-      alert(err);
+    if (usuario == null) {
+      alert("não foi possível realizar login");
       return;
     }
 
@@ -36,6 +36,7 @@ export default function App() {
     setCarregando(false);
     setLogado(true);
   };
+
   if (carregando) return <>Carregando</>;
   if (logado)
     return (

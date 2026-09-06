@@ -5,7 +5,8 @@ export async function GetListaUsuario() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      return [null, "Usuário não autenticado"];
+      console.log("Sem token no local storage");
+      return null;
     }
 
     const resposta = await fetch(REQUEST_URL, {
@@ -17,14 +18,15 @@ export async function GetListaUsuario() {
 
     if (!resposta.ok) {
       console.log("Error:", resposta.status, resposta.statusText);
-      return [null, "Falha na requisição"];
+      return null;
     }
 
     const responseBody = await resposta.json();
+    console.log("usuarios:", responseBody.usuarios);
 
-    return [responseBody.usuarios, null];
+    return [...responseBody.usuarios];
   } catch (err) {
-    console.error(err);
-    return [null, "Erro na requisição"];
+    console.error("Error na requisição ", err);
+    return null;
   }
 }

@@ -1,12 +1,5 @@
 const REQUEST_URL = "http://localhost:4000/login";
 
-export let UsuarioLogado = {
-  uid: "",
-  nome: "",
-  email: "",
-  perfil: "",
-};
-
 // faz o request api/login e armazena o jwt no local storage
 export async function fazerLogin(login, senha) {
   try {
@@ -17,19 +10,20 @@ export async function fazerLogin(login, senha) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ login, senha }),
+      body: JSON.stringify({ login: login, senha: senha }),
     });
 
     // se status diferente de 200
     if (!resposta.ok) {
-      console.log("Error:", resposta.statusText);
-      return ["Não foi possível conectar com a API", null];
+      console.error("Error:", resposta.status, resposta.statusText);
+      return null;
     }
 
     const responseBody = await resposta.json();
 
     if (responseBody.token == null) {
-      ["Token Inválido", null];
+      console.error("Token Invalido");
+      return null;
     }
 
     //  sucesso então armazena token no local Storage
@@ -38,11 +32,10 @@ export async function fazerLogin(login, senha) {
     localStorage.setItem("token", responseBody.token);
     localStorage.setItem("usuario", responseBody.usuario);
 
-    return [responseBody.usuario, null];
-
+    return responseBody.usuario;
   } catch (err) {
-    console.log(err);
-    return ["Não foi possível conectar com a API", null];
+    console.error(err);
+    return null;
   }
 }
 

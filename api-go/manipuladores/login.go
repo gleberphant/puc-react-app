@@ -24,7 +24,7 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 	// extrai login e senha do body
 	err := json.NewDecoder(req.Body).Decode(&requestBody)
 	if err != nil {
-		log.Printf("Error: %s", err.Error())
+		log.Printf("Error Decoder: %s", err.Error())
 		res.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
 		return

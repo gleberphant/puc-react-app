@@ -5,8 +5,27 @@ import (
 )
 
 var repoUsuario = []modelos.Usuario{
-	{Uid: "1", Login: "admin@admin", Senha: "admin"},
-	{Uid: "2", Login: "eduardo.lino@pucpr.br", Senha: "123456"},
+	{
+		Uid:    "00000000-0000-0000-0000-000000000000",
+		Login:  "admin@admin",
+		Senha:  "admin",
+		Nome:   "Adminsitrador",
+		Perfil: "Admin",
+	},
+	{
+		Uid:    "c6f23200-df9d-45a8-996e-2b92afd6a215",
+		Login:  "usuario",
+		Senha:  "123456",
+		Nome:   "Usuario",
+		Perfil: "Usuario",
+	},
+	{
+		Uid:    "7746da64-fc2e-429b-aa17-c1c4b4c76962",
+		Login:  "usuario",
+		Senha:  "123456",
+		Nome:   "Usuario",
+		Perfil: "Usuario",
+	},
 }
 
 func RepositorioUsuariosMock() []modelos.Usuario {
