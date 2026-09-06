@@ -45,9 +45,9 @@ export function Cabecalho({ logout, usuario }) {
                 <Popover id="popover-positioned-bottom">
                   <Popover.Header as="h3">{usuario.Email}</Popover.Header>
                   <Popover.Body>
-                    {usuario.Email}
-                    {usuario.Nome}
-                    {usuario.Perfil}
+                    <p>Email:{usuario.Email}</p>
+                    <p>Nome:{usuario.Nome}</p>
+                    <p>Perfil:{usuario.Perfil}</p>
                   </Popover.Body>
                 </Popover>
               }
