@@ -10,11 +10,11 @@ import { fazerLogin, fazerLogout } from "./servicos/autenticacao.js";
 import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
 import LayoutPage from "./paginas/Layout.Page.jsx";
-import { CadastroUsuarioPage } from "./paginas/Cadastro.Page.jsx";
+import { CadastroUsuarioPage } from "./paginas/CadastroUsuario.Page.jsx";
 import { ListarUsuariosPage } from "./paginas/ListaUsuarios.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
 export default function App() {
-  const [logado, setLogado] = useState(true);
+  const [logado, setLogado] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState({});
   const [carregando, setCarregando] = useState(false);
 

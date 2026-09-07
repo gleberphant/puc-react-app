@@ -24,10 +24,11 @@ func main() {
 	handler := intermediarios.ApplicationMiddleware(
 		intermediarios.LogMidleware(
 			intermediarios.AuthMidleware(
-				intermediarios.CorsMiddleware(roteador),
+				roteador,
 			),
 		),
 	)
+	handler = intermediarios.CorsMiddleware(handler)
 
 	servidor := http.Server{
 		Addr:              PORTA,

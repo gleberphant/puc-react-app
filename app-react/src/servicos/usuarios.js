@@ -1,11 +1,14 @@
 const REQUEST_URL = "http://localhost:4000/usuarios";
 
+export async function CadastrarUsuario() {}
+
 export async function GetListaUsuario() {
+  console.log("Listando usuarios do sistema");
   try {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.log("Sem token no local storage");
+      console.error("Sem token no local storage");
       return null;
     }
 

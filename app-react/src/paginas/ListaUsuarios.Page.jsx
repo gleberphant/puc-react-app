@@ -6,6 +6,7 @@ export function ListarUsuariosPage() {
   const [carregando, setCarregando] = useState(true);
 
   const CarregarLista = async () => {
+
     const lista = await GetListaUsuario();
 
     if (lista == null) setListaUsuarios([]);

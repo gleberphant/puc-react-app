@@ -1,0 +1,15 @@
+.btn-crimson {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: crimson;
+  --bs-btn-border-color: crimson;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #a9002f;
+  --bs-btn-hover-border-color: #a9002f;
+  --bs-btn-active-bg: #8f0028;
+  --bs-btn-active-border-color: #8f0028;
+}
+
+
+.login-page{
+    background-color: crimson;
+}

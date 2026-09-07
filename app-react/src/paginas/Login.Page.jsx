@@ -1,4 +1,6 @@
+import PUCBRASAO from "../assets/images/pucpr-brasao-redondo.png";
 import { Container, Card, Button, Form } from "react-bootstrap";
+import "../estilos/Login.Page.css";
 
 export default function LoginPage({ login }) {
   const handleSubmit = async (e) => {
@@ -12,14 +14,13 @@ export default function LoginPage({ login }) {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
-      <Card
-        style={{ width: "100%", maxWidth: "420px" }}
-        className="p-4 shadow-sm border rounded-4"
-      >
-        <h4 className="text-center mb-4">Acesso ao Sistema</h4>
+    <Container fluid className="login-page">
+      <Card className="login-card">
+        <img className="login-logo" src={PUCBRASAO} alt="Brasão da PUCPR" />
 
-        <Form onSubmit={(e) => handleSubmit(e)}>
+        <h4 className="text-center mb-4">Sistemas Web Seguros</h4>
+
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -44,7 +45,11 @@ export default function LoginPage({ login }) {
             <Form.Check type="checkbox" label="Não sou robô" required />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button
+            className="d-block mx-auto px-5"
+            variant="crimson"
+            type="submit"
+          >
             Entrar
           </Button>
         </Form>

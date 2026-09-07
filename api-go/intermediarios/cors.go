@@ -4,7 +4,7 @@ import "net/http"
 
 func CorsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		// Origem permitida (em produção, substitua pelo domínio exato do seu React, ex: "http://localhost:5173")
+		// Origem permitida
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 
 		// Métodos HTTP permitidos

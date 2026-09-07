@@ -5,20 +5,20 @@
 }
 
 .app-container {
-  width: 80vw;
-  height: 80vh;
-  padding: 0;
-  margin: 10vh auto;
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 1rem;
+  background-color: crimson;
 }
 
 .app-card {
   width: 100%;
   max-width: 800px;
   height: 100%;
-  min-height: 400px;
+  min-height: 600px;
   max-height: 600px;
   display: flex;
   flex-direction: column;
@@ -31,20 +31,23 @@
   background-color: var(--app-dark);
 }
 
-.app-header .navbar-brand {
-  font-weight: bold;
-}
-
 .app-header .navbar-nav {
-  gap: 24px;
+  gap: 12px;
   flex-wrap: nowrap;
   white-space: nowrap;
 }
 
+.app-header .navbar-brand {
+  padding:12px;
+  margin: 0px;
+  font-weight: bold;
+}
+
+
 .app-header .nav-link {
-  color: var(--app-light);
+  padding:12px;
   margin: 0;
-  white-space: nowrap;
+  color: var(--app-light);
 }
 
 .app-header .nav-link:hover,
