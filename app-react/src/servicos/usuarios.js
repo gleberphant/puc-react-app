@@ -1,5 +1,41 @@
 const BASE_URL = "http://localhost:4000/";
 
+export async function DeletarUsuario(uid) {
+  try {
+    console.info("Deletando usuario uid: ", uid);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("token inválido");
+      return null;
+    }
+    console.info("FETCH: ");
+    const resposta = await fetch(`${BASE_URL}/usuario/1`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+      body: JSON.stringify({ uid: uid }),
+    });
+
+    console.info("json: ");
+    const responseBody = await resposta.json();
+
+    console.info("reposta: ");
+    if (!resposta.ok) {
+      console.error(responseBody);
+      return new Error(responseBody);
+    }
+
+    console.log(responseBody);
+    return null;
+  } catch (err) {
+    console.error("Catch:", err);
+    return err;
+  }
+}
+
 export async function CadastrarUsuario(novoUsuario) {
   console.log("cadastrando novo usuario");
   try {
@@ -11,7 +47,6 @@ export async function CadastrarUsuario(novoUsuario) {
     }
 
     console.info("cadastrando usuario: ", novoUsuario);
-
 
     const resposta = await fetch(`${BASE_URL}/usuario`, {
       method: "POST",
