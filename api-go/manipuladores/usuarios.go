@@ -54,6 +54,8 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Nome:   requestBody.Nome,
 		Perfil: requestBody.Perfil,
 	})
+
+	
 	// confirmação do service
 	if err != nil {
 		log.Printf("Error: %s", err.Error())

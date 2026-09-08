@@ -5,13 +5,14 @@ import (
 
 	"github.com/gleberphant/puc-react-app/api-go/modelos"
 	"github.com/gleberphant/puc-react-app/api-go/repositorios"
+	"github.com/google/uuid"
 )
 
 var repoUsuario []modelos.Usuario = repositorios.RepositorioUsuariosMock()
 
 func CriarUsuarios(novoUsuario modelos.Usuario) error {
 	if novoUsuario.Uid == "" {
-		return errors.New("uid invalido")
+		novoUsuario.Uid = uuid.New().String()
 	}
 
 	for _, usuario := range repoUsuario {
