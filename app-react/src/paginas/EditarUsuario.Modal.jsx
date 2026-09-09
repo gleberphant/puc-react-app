@@ -1,22 +1,39 @@
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import FormularioUsuario from "../componentes/FormularioUsuario";
 
 export default function EditarUsuarioModal({
   usuarioSelecionado,
   show,
   fechar,
+  onSubmit,
 }) {
+  const salvarEdicao = async (usuario) => {
+    const sucesso = await onSubmit(usuario);
+
+    if (sucesso) {
+      fechar();
+    }
+  };
+
   return (
-    <>
-      <Modal show={show} centered>
-        <Modal.Header>
-          Editar Usuário<Button onClick={fechar}>fechar</Button>
-        </Modal.Header>
-        <Modal.Body>
-          <FormularioUsuario usuario={usuarioSelecionado} fechar={fechar} />
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-    </>
+    <Modal
+      show={show}
+      onHide={fechar}
+      centered
+      key={usuarioSelecionado?.Uid ?? "novo"}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Editar usuário</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <FormularioUsuario
+          usuario={usuarioSelecionado}
+          modo="editar"
+          onSubmit={salvarEdicao}
+          onCancel={fechar}
+        />
+      </Modal.Body>
+    </Modal>
   );
 }

@@ -33,7 +33,11 @@ export async function CriarUsuario(novoUsuario) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
     console.info("Response body: ", responseBody);
@@ -65,7 +69,11 @@ export async function ListarUsuarios() {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
     console.info("Response body: ", responseBody);
@@ -101,7 +109,11 @@ export async function EditarUsuario(novoUsuario) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
     console.info("Response body: ", responseBody);
@@ -116,8 +128,6 @@ export async function EditarUsuario(novoUsuario) {
 // deletar usuario
 export async function ExcluirUsuario(uid) {
   try {
-    console.info("Deletando usuario uid: ", uid);
-
     const token = CheckToken();
 
     if (!token) {
@@ -134,14 +144,16 @@ export async function ExcluirUsuario(uid) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
-    console.info("Response body: ", responseBody);
-
     return [resposta.status, null];
-  } catch (err) {
-    console.error("Catch:", err);
-    return [null, err];
+  } catch (erro) {
+    console.error("Erro ao excluir usuário:", erro);
+    return [null, erro];
   }
 }
