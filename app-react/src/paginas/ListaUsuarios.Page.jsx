@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
-import { ExcluirUsuario, ListarUsuarios } from "../servicos/usuarios";
-import { Button, Spinner, Table } from "react-bootstrap";
+import {
+  EditarUsuario,
+  ExcluirUsuario,
+  ListarUsuarios,
+} from "../servicos/usuarios";
+import { Button, Modal, Spinner, Table } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import "../estilos/ListaUsuarios.Page.css";
 import Carregando from "../componentes/Carregando";
 import ModalUsuario from "../componentes/ModalUsuario";
+import FormularioUsuario from "../componentes/FormularioUsuario";
 
 export default function ListarUsuariosPage() {
   const [listaUsuarios, setListaUsuarios] = useState([]);
@@ -68,6 +73,30 @@ export default function ListarUsuariosPage() {
     setShow(true);
   };
 
+  const [editar, setEditar] = useState(false);
+
+  const acaoEditar = (usuario) => {
+    setUsuarioSelecionado(usuario);
+    setEditar(true);
+  };
+
+  const handleSubmit = async (novoUsuario) => {
+    let payload, err;
+
+    [, err] = await EditarUsuario(novoUsuario);
+
+    if (err != null) {
+      alert("Falha no cadastro: ", err);
+    }
+    setEditar(false);
+
+    [payload, err] = await ListarUsuarios();
+    setCarregando(false);
+
+    if (err != null) setListaUsuarios([]);
+    else setListaUsuarios(payload);
+  };
+
   if (carregando || listaUsuarios == null) return <Carregando></Carregando>;
 
   return (
@@ -78,6 +107,19 @@ export default function ListarUsuariosPage() {
           visivel={show}
           fecharModal={() => setShow(false)}
         ></ModalUsuario>
+
+        <Modal show={editar}>
+          <Modal.Body>
+            <FormularioUsuario
+              usuario={usuarioSelecionado}
+              handleSubmit={handleSubmit}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setEditar(false)}>fechar</Button>
+          </Modal.Footer>
+        </Modal>
+
         <Table striped hover size="sm">
           <thead>
             <tr>
@@ -105,7 +147,14 @@ export default function ListarUsuariosPage() {
                       className="bi bi-eye-fill"
                       style={{ fontSize: "24px" }}
                     />
-
+                    <Button
+                      variant="link"
+                      size="sm"
+                      onClick={() => acaoEditar(u)}
+                      aria-label="Ver detalhes"
+                      className="bi bi-pen-fill"
+                      style={{ fontSize: "22px", color: "orange" }}
+                    />
                     {!excluindo ? (
                       <Button
                         variant="link"

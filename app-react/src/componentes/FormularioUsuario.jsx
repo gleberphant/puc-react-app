@@ -1,13 +1,13 @@
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
-import { CriarUsuario } from "../servicos/usuarios";
 
-export default function CadastroUsuarioPage() {
-  const handleSubmit = async (e) => {
+export default function FormularioUsuario({ usuario, handleSubmit }) {
+  const enviaFormulario = async (e) => {
     e.preventDefault();
 
     const f = new FormData(e.target);
 
     const novoUsuario = {
+      Uid: f.get("uid"),
       Login: f.get("login"),
       Senha: f.get("senha"),
       Nome: f.get("nome"),
@@ -15,17 +15,30 @@ export default function CadastroUsuarioPage() {
       Perfil: f.get("perfil"),
     };
 
-    const [, err] = await CriarUsuario(novoUsuario);
+    console.log("usuario selecionado", novoUsuario);
 
-    if (err != null) {
-      alert("Falha no cadastro: ", err);
-    }
+    await handleSubmit(novoUsuario);
   };
 
   return (
     <>
-      <br />
-      <Form className="formulario mb-3" onSubmit={handleSubmit}>
+      <Form className="formulario mb-3" onSubmit={enviaFormulario}>
+        <Form.Group className="mb-3" as={Row}>
+          <Form.Label sm={3} as={Col}>
+            Uid
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              name="uid"
+              placeholder="Novo usuario"
+              defaultValue={usuario?.Uid ?? ""}
+              readOnly
+              plaintext
+              required
+            />
+          </Col>
+        </Form.Group>
+
         <Form.Group className="mb-3" as={Row}>
           <Form.Label sm={3} as={Col}>
             Login
@@ -36,6 +49,7 @@ export default function CadastroUsuarioPage() {
               <Form.Control
                 name="login"
                 placeholder="Nome do Usuário"
+                defaultValue={usuario?.Login ?? ""}
                 required
               />
             </InputGroup>
@@ -50,6 +64,7 @@ export default function CadastroUsuarioPage() {
             <Form.Control
               name="senha"
               placeholder="Senha"
+              defaultValue={usuario?.Senha ?? ""}
               type="text"
               required
             ></Form.Control>
@@ -58,12 +73,13 @@ export default function CadastroUsuarioPage() {
 
         <Form.Group className="mb-3" as={Row}>
           <Form.Label sm={3} as={Col}>
-            Nome Completo{" "}
+            Nome Completo
           </Form.Label>
           <Col>
             <Form.Control
               name="nome"
               placeholder="Nome Completo"
+              defaultValue={usuario?.Nome ?? ""}
               type="text"
               required
             ></Form.Control>
@@ -78,19 +94,26 @@ export default function CadastroUsuarioPage() {
             <Form.Control
               name="email"
               placeholder="E-mail"
+              defaultValue={usuario?.Email ?? ""}
               type="email"
               required
             ></Form.Control>
           </Col>
         </Form.Group>
+
         <Form.Group className="mb-3" as={Row}>
           <Form.Label sm={3} as={Col}>
             Perfil
           </Form.Label>
           <Col sm={9}>
-            <Form.Select name="perfil" placeholder="Perfil" required>
-              <option value="admin">Admin</option>
+            <Form.Select
+              name="perfil"
+              placeholder="Perfil"
+              defaultValue={usuario?.Perfil ?? "usuario"}
+              required
+            >
               <option value="usuario">Usuário</option>
+              <option value="admin">Admin</option>
             </Form.Select>
           </Col>
         </Form.Group>

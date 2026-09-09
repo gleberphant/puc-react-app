@@ -11,7 +11,7 @@ import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
 import LayoutPage from "./paginas/Layout.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
-import CadastroUsuarioPage from "./paginas/CadastroUsuario.Page.jsx";
+import CadastroUsuarioPage from "./paginas/CriarUsuario.Page.jsx";
 import ListarUsuariosPage from "./paginas/ListaUsuarios.Page.jsx";
 import Carregando from "./componentes/Carregando.jsx";
 
