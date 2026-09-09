@@ -1,15 +1,19 @@
+:root {
+  --app-dark: #1b2636;
+  --app-light: #ffffff;
+  --app-hover: crimson;
+  --app-background: #8a0538;
+}
+
 .btn-crimson {
   --bs-btn-color: #fff;
-  --bs-btn-bg: crimson;
-  --bs-btn-border-color: crimson;
+  --bs-btn-bg: var(--app-background);
+  --bs-btn-border-color: var(--app-background);
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #a9002f;
-  --bs-btn-hover-border-color: #a9002f;
-  --bs-btn-active-bg: #8f0028;
-  --bs-btn-active-border-color: #8f0028;
+  --bs-btn-hover-bg: var(--app-hover);
+  --bs-btn-hover-border-color: var(--app-hover);
+  --bs-btn-active-bg: var(--app-background);
+  --bs-btn-active-border-color: var(--app-background);
 }
 
 
-.login-page{
-    background-color: crimson;
-}

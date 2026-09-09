@@ -1,75 +1,129 @@
 import { useEffect, useState } from "react";
-import { DeletarUsuario, GetListaUsuario } from "../servicos/usuarios";
+import { ExcluirUsuario, ListarUsuarios } from "../servicos/usuarios";
+import { Button, Spinner, Table } from "react-bootstrap";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-export function ListarUsuariosPage() {
+import "../estilos/ListaUsuarios.Page.css";
+import Carregando from "../componentes/Carregando";
+import ModalUsuario from "../componentes/ModalUsuario";
+
+export default function ListarUsuariosPage() {
   const [listaUsuarios, setListaUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
-
-  const ExcluirUsuario = async (uid) => {
-    const err = DeletarUsuario(uid);
-
-    if (err != null) {
-      alert("falha ao deletar usuario ", err);
-    }
-    return;
-  };
+  const [excluindo, setExcluindo] = useState(false);
 
   useEffect(() => {
-    const CarregarLista = async () => {
-      const lista = await GetListaUsuario();
-
-      if (lista == null) setListaUsuarios([]);
-      else setListaUsuarios(lista);
-
+    const carregarLista = async () => {
+      console.info("Montando a Página de Lista de Usuários");
+      setCarregando(true);
+      const [lista, err] = await ListarUsuarios();
       setCarregando(false);
-      return;
+
+      if (err != null) setListaUsuarios([]);
+      else setListaUsuarios(lista);
     };
-    CarregarLista();
+
+    carregarLista();
+
+    return () => {
+      console.info("Desmontando Página de Lista de Usuários");
+    };
   }, []);
 
-  if (carregando || listaUsuarios == null) return <>carregando</>;
+  const acaoExcluirUsuario = async (usuario) => {
+    setExcluindo(true);
+
+    const uid = usuario.Uid;
+
+    if (!confirm(`Deseja realmente remover ${usuario.Nome} ?`)) {
+      setExcluindo(false);
+      return;
+    }
+
+    let payload, err;
+
+    [, err] = await ExcluirUsuario(uid);
+
+    setExcluindo(false);
+
+    if (err != null) {
+      alert(`Falha ao deletar usuario: ${err.message}`);
+      return;
+    }
+
+    setCarregando(true);
+
+    [payload, err] = await ListarUsuarios();
+    setCarregando(false);
+
+    if (err != null) setListaUsuarios([]);
+    else setListaUsuarios(payload);
+  };
+
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
+  const [show, setShow] = useState(false);
+
+  const acaoVerDetalhes = (usuario) => {
+    setUsuarioSelecionado(usuario);
+    setShow(true);
+  };
+
+  if (carregando || listaUsuarios == null) return <Carregando></Carregando>;
 
   return (
     <>
-      <h2>lista de usuarios</h2>
-
-      <table>
-        <thead>
-          <tr>
-            <td>Uid</td>
-            <td>Login</td>
-            <td>Nome Completo</td>
-            <td>Email</td>
-            <td>Perfil</td>
-            <td>Ações</td>
-          </tr>
-        </thead>
-        <tbody>
-          {listaUsuarios.map((u) => {
-            return (
-              <>
+      <div className="lista-usuarios">
+        <ModalUsuario
+          usuario={usuarioSelecionado}
+          visivel={show}
+          fecharModal={() => setShow(false)}
+        ></ModalUsuario>
+        <Table striped hover size="sm">
+          <thead>
+            <tr>
+              <th>Login</th>
+              <th>Nome Completo</th>
+              <th>Email</th>
+              <th>Perfil</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listaUsuarios.map((u) => {
+              return (
                 <tr key={u.Uid}>
-                  <td style={{ border: "1px", borderStyle: "solid" }}>
-                    {u.Login}
-                  </td>
-                  <td style={{ border: "1px", borderStyle: "solid" }}>
-                    {u.Nome}
-                  </td>
-                  <td style={{ border: "1px", borderStyle: "solid" }}>
-                    {u.Email}
-                  </td>
-                  <td style={{ border: "1px", borderStyle: "solid" }}>
-                    {u.Perfil}
-                  </td>
-                  <td style={{ border: "1px", borderStyle: "solid" }}>
-                    <button onClick={() => ExcluirUsuario(u.Uid)}> X</button>
+                  <td>{u.Login}</td>
+                  <td>{u.Nome}</td>
+                  <td>{u.Email}</td>
+                  <td>{u.Perfil}</td>
+                  <td>
+                    <Button
+                      variant="link"
+                      size="sm"
+                      onClick={() => acaoVerDetalhes(u)}
+                      aria-label="Ver detalhes"
+                      className="bi bi-eye-fill"
+                      style={{ fontSize: "24px" }}
+                    />
+
+                    {!excluindo ? (
+                      <Button
+                        variant="link"
+                        onClick={() => acaoExcluirUsuario(u)}
+                        aria-label="Excluir Usuario"
+                        className="bi bi-person-x-fill"
+                        style={{ fontSize: "24px", color: "crimson" }}
+                      />
+                    ) : (
+                      <Spinner animation="border" size="sm" role="status" />
+                    )}
                   </td>
                 </tr>
-              </>
-            );
-          })}
-        </tbody>
-      </table>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
     </>
   );
 }

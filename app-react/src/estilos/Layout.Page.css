@@ -1,8 +1,4 @@
-:root {
-  --app-dark: #1b2636;
-  --app-light: #ffffff;
-  --app-hover: crimson;
-}
+
 
 .app-container {
   min-height: 100vh;
@@ -11,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
-  background-color: crimson;
+  background-color: var(--app-background);
 }
 
 .app-card {
@@ -52,7 +48,7 @@
 
 .app-header .nav-link:hover,
 .nav-item:hover {
-  color: black;
+  color: var(--app-light);
   background-color: var(--app-hover);
 }
 
@@ -70,7 +66,7 @@
 }
 
 .app-navbar .navbar-toggler:hover {
-  box-shadow: 0 0 0 0.2rem crimson;
+  box-shadow: 0 0 0 0.2rem var(--app-background);
 }
 
 .app-body {

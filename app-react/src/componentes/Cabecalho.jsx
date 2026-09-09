@@ -3,16 +3,15 @@ import {
   Popover,
   Navbar,
   Nav,
-  NavDropdown,
   Container,
 } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "../estilos/Layout.Page.css";
 import PUCBRASAO from "../assets/images/pucpr-brasao-redondo.png";
 
-export function Cabecalho({ logout, usuario }) {
+export function Cabecalho({ logout, usuarioLogado }) {
   return (
-    <Navbar className="app-navbar" expand="lg" data-bs-theme="dark">
+    <Navbar className="app-navbar" expand="md" data-bs-theme="dark">
       <Container>
         <Navbar.Brand href="#home">
           <img height="50" src={PUCBRASAO}></img>
@@ -25,7 +24,6 @@ export function Cabecalho({ logout, usuario }) {
             <Nav.Link as={NavLink} to="/">
               Home
             </Nav.Link>
-
             <Nav.Link as={NavLink} to="/usuarios">
               Listar Usuarios
             </Nav.Link>
@@ -43,11 +41,11 @@ export function Cabecalho({ logout, usuario }) {
               placement="bottom"
               overlay={
                 <Popover id="popover-positioned-bottom">
-                  <Popover.Header as="h3">{usuario.Email}</Popover.Header>
+                  <Popover.Header as="h3">{usuarioLogado.Email}</Popover.Header>
                   <Popover.Body>
-                    <p>Email:{usuario.Email}</p>
-                    <p>Nome:{usuario.Nome}</p>
-                    <p>Perfil:{usuario.Perfil}</p>
+                    <p>Email:{usuarioLogado.Email}</p>
+                    <p>Nome:{usuarioLogado.Nome}</p>
+                    <p>Perfil:{usuarioLogado.Perfil}</p>
                   </Popover.Body>
                 </Popover>
               }

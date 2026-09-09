@@ -1,55 +1,28 @@
-const BASE_URL = "http://localhost:4000/";
+import { CheckToken } from "./autenticacao";
 
-export async function DeletarUsuario(uid) {
+const HOST_URL = "http://localhost:4000";
+
+const ENDPOINT = {
+  CRIAR: { URL: () => `${HOST_URL}/usuarios`, METODO: "POST" },
+  LISTAR: { URL: () => `${HOST_URL}/usuarios`, METODO: "GET" },
+  EXIBIR: { URL: (uid) => `${HOST_URL}/usuarios/${uid}`, METODO: "GET" },
+  EDITAR: { URL: (uid) => `${HOST_URL}/usuarios/${uid}`, METODO: "PUT" },
+  EXCLUIR: { URL: (uid) => `${HOST_URL}/usuarios/${uid}`, METODO: "DELETE" },
+};
+
+// criar usuario
+export async function CriarUsuario(novoUsuario) {
   try {
-    console.info("Deletando usuario uid: ", uid);
+    console.info("Criando  novo usuario ", novoUsuario);
 
-    const token = localStorage.getItem("token");
+    const token = CheckToken();
 
     if (!token) {
-      console.error("token inválido");
-      return null;
-    }
-    console.info("FETCH: ");
-    const resposta = await fetch(`${BASE_URL}/usuario/1`, {
-      method: "DELETE",
-      headers: {
-        Authorization: token,
-      },
-      body: JSON.stringify({ uid: uid }),
-    });
-
-    console.info("json: ");
-    const responseBody = await resposta.json();
-
-    console.info("reposta: ");
-    if (!resposta.ok) {
-      console.error(responseBody);
-      return new Error(responseBody);
+      throw new Error("Token inválido");
     }
 
-    console.log(responseBody);
-    return null;
-  } catch (err) {
-    console.error("Catch:", err);
-    return err;
-  }
-}
-
-export async function CadastrarUsuario(novoUsuario) {
-  console.log("cadastrando novo usuario");
-  try {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      console.error("Token inválido");
-      return null;
-    }
-
-    console.info("cadastrando usuario: ", novoUsuario);
-
-    const resposta = await fetch(`${BASE_URL}/usuario`, {
-      method: "POST",
+    const resposta = await fetch(ENDPOINT.CRIAR.URL(), {
+      method: ENDPOINT.CRIAR.METODO,
       headers: {
         Authorization: token,
       },
@@ -59,47 +32,79 @@ export async function CadastrarUsuario(novoUsuario) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      console.error("CODE", resposta.status, resposta.statusText);
-      console.error("BODY", responseBody);
-      return new Error("Error", resposta.status, resposta.statusText);
+      throw new Error(resposta.status, resposta.statusText, responseBody);
     }
 
-    console.log("Response body", responseBody);
-    return null;
+    console.info("Response body: ", responseBody);
+
+    return [resposta.status, null];
   } catch (err) {
     console.error(err);
-    return err;
+    return [null, err];
   }
 }
-
-export async function GetListaUsuario() {
-  console.log("Listando usuarios do sistema");
+// listar usuario
+export async function ListarUsuarios() {
   try {
-    const token = localStorage.getItem("token");
+    console.info("Listanto Usuarios");
+
+    const token = CheckToken();
 
     if (!token) {
-      console.error("Sem token no local storage");
-      return null;
+      throw new Error("Token inválido");
     }
 
-    const resposta = await fetch(`${BASE_URL}/usuarios`, {
-      method: "GET",
+    const resposta = await fetch(ENDPOINT.LISTAR.URL(), {
+      method: ENDPOINT.LISTAR.METODO,
       headers: {
         Authorization: token,
       },
     });
 
+    const responseBody = await resposta.json();
+
     if (!resposta.ok) {
-      console.log("Error:", resposta.status, resposta.statusText);
-      return null;
+      throw new Error(resposta.status, resposta.statusText, responseBody);
     }
 
-    const responseBody = await resposta.json();
-    console.log("usuarios:", responseBody.usuarios);
+    console.info("Response body: ", responseBody);
 
-    return [...responseBody.usuarios];
+    return [[...responseBody.usuarios], null];
   } catch (err) {
     console.error("Error na requisição ", err);
-    return null;
+    return [null, err];
+  }
+}
+
+// deletar usuario
+export async function ExcluirUsuario(uid) {
+  try {
+    console.info("Deletando usuario uid: ", uid);
+
+    const token = CheckToken();
+
+    if (!token) {
+      throw new Error("Token inválido");
+    }
+
+    const resposta = await fetch(ENDPOINT.EXCLUIR.URL(uid), {
+      method: ENDPOINT.EXCLUIR.METODO,
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const responseBody = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(resposta.status, resposta.statusText, responseBody);
+    }
+
+    console.info("Response body: ", responseBody);
+
+    return [resposta.status, null];
+  } catch (err) {
+    console.error("Catch:", err);
+    return [null, err];
   }
 }

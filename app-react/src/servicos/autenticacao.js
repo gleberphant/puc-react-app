@@ -44,3 +44,13 @@ export function fazerLogout() {
   console.log("fazendo log out");
   localStorage.removeItem("token");
 }
+
+export function CheckToken() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return null;
+  }
+
+  return token;
+}

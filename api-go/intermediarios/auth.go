@@ -10,23 +10,23 @@ import (
 func AuthMidleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		if req.URL.Path == "/login" || req.Method == http.MethodOptions {
-			log.Printf("rota do login")
+			log.Printf("Rota pública sem login")
 			next.ServeHTTP(res, req)
 			return
 		}
 
-		log.Printf("buscando autorização")
-		authorization := req.Header.Get("Authorization")
+		tokenString := req.Header.Get("Authorization")
 
-		log.Printf("Token: %s", authorization)
+		//log.Printf("Token: %s", authorization)
 
-		if authorization == "" {
+		if tokenString == "" {
 			http.Error(res, "Token ausente", http.StatusUnauthorized)
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(
-			authorization,
+		// verifica assinatura do token
+		autorizacao, err := jwt.ParseWithClaims(
+			tokenString,
 			jwt.MapClaims{},
 			func(token *jwt.Token) (interface{}, error) {
 				// Impede aceitar outro algoritmo de assinatura
@@ -38,10 +38,13 @@ func AuthMidleware(next http.Handler) http.Handler {
 			},
 		)
 
-		if err != nil || !token.Valid {
+		if err != nil || !autorizacao.Valid {
+			log.Printf("Token inválido ou expirado")
 			http.Error(res, "Token inválido ou expirado", http.StatusUnauthorized)
 			return
 		}
+
+		log.Printf("Usuario autorizado ")
 
 		next.ServeHTTP(res, req)
 	})

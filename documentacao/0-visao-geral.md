@@ -43,57 +43,20 @@ A solução deverá conter as funcionalidades obrigatórias:
 
  
 
-Parte 1 – Modelagem da API
-
+# Parte 1 – Modelagem da API
 No relatório ou documentação do projeto, apresente pelo menos quatro endpoints REST utilizados na solução.
-
 Para cada endpoint informe: Método HTTP; URL; Finalidade; Código de resposta esperado.
 
 Exemplo:
 
-Método
-
-Endpoint
-
-Finalidade
-
-Resposta
-
-GET
-
-/usuarios
-
-Listar usuários
-
-200 OK
-
-POST
-
-/usuarios
-
-Criar usuário
-
-201 Created
-
-PUT
-
-/usuarios/{id}
-
-Atualizar usuário
-
-200 OK
-
-DELETE
-
-/usuarios/{id}
-
-Excluir usuário
-
-204 No Content
+Método  Endpoint        Finalidade          Resposta
+GET     /usuarios       Listar usuários     200 OK
+POST    /usuarios       Criar usuário       201 Created
+PUT     /usuarios/{id}  Atualizar usuário   200 OK
+DELETE  /usuarios/{id}  Excluir usuário     204 No Content
 
  
-
-Parte 2 – Segurança com JWT
+# Parte 2 – Segurança com JWT
 
 Sua API deverá utilizar autenticação baseada em JWT (JSON Web Token). Na documentação explique:
 

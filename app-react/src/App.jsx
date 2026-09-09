@@ -10,9 +10,11 @@ import { fazerLogin, fazerLogout } from "./servicos/autenticacao.js";
 import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
 import LayoutPage from "./paginas/Layout.Page.jsx";
-import { CadastroUsuarioPage } from "./paginas/CadastroUsuario.Page.jsx";
-import { ListarUsuariosPage } from "./paginas/ListaUsuarios.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
+import CadastroUsuarioPage from "./paginas/CadastroUsuario.Page.jsx";
+import ListarUsuariosPage from "./paginas/ListaUsuarios.Page.jsx";
+import Carregando from "./componentes/Carregando.jsx";
+
 export default function App() {
   const [logado, setLogado] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState({});
@@ -37,15 +39,22 @@ export default function App() {
     setLogado(true);
   };
 
-  if (carregando) return <>Carregando</>;
+  if (carregando) return <Carregando></Carregando>;
   if (logado)
     return (
       <BrowserRouter>
         <Routes>
           <Route
-            element={<LayoutPage logout={logout} usuario={usuarioLogado} />}
+            element={
+              <LayoutPage logout={logout} usuarioLogado={usuarioLogado} />
+            }
           >
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/"
+              element={
+                <HomePage logout={logout} usuarioLogado={usuarioLogado} />
+              }
+            />
             <Route path="/sobre" element={<SobrePage />} />
             <Route path="/usuarios" element={<ListarUsuariosPage />} />
             <Route path="/cadastro" element={<CadastroUsuarioPage />} />

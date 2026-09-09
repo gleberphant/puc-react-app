@@ -1,7 +1,7 @@
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
-import { CadastrarUsuario } from "../servicos/usuarios";
+import { CriarUsuario } from "../servicos/usuarios";
 
-export function CadastroUsuarioPage() {
+export default function CadastroUsuarioPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -15,7 +15,7 @@ export function CadastroUsuarioPage() {
       Perfil: f.get("perfil"),
     };
 
-    const err = await CadastrarUsuario(novoUsuario);
+    const [, err] = await CriarUsuario(novoUsuario);
 
     if (err != null) {
       alert("Falha no cadastro: ", err);
@@ -24,7 +24,6 @@ export function CadastroUsuarioPage() {
 
   return (
     <>
-      <h3>Cadastro de usuarios</h3>
       <br />
       <Form className="formulario mb-3" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" as={Row}>
@@ -34,7 +33,11 @@ export function CadastroUsuarioPage() {
           <Col sm={9}>
             <InputGroup>
               <InputGroup.Text id="nomeusuario">@</InputGroup.Text>
-              <Form.Control name="login" placeholder="Nome do Usuário" required />
+              <Form.Control
+                name="login"
+                placeholder="Nome do Usuário"
+                required
+              />
             </InputGroup>
           </Col>
         </Form.Group>

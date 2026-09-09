@@ -10,27 +10,18 @@ import (
 )
 
 func InjetarRotasUsuarios(roteador *http.ServeMux) {
-	// create
-	roteador.HandleFunc("POST /usuario", CriarUsuarios)
-
-	// read
+	// create, read, update, delete
+	roteador.HandleFunc("POST /usuarios", CriarUsuarios)
 	roteador.HandleFunc("GET /usuarios", ListarUsuarios)
-	roteador.HandleFunc("GET /usuario/{uid}", ExibirUsuarios)
-
-	// update
-	roteador.HandleFunc("PUT /usuario/{uid}", EditarUsuarios)
-
-	// delete
-	roteador.HandleFunc("DELETE /usuario/{uid}", DeletarUsuarios)
+	roteador.HandleFunc("GET /usuarios/{uid}", ExibirUsuarios)
+	roteador.HandleFunc("PUT /usuarios/{uid}", EditarUsuarios)
+	roteador.HandleFunc("DELETE /usuarios/{uid}", DeletarUsuarios)
 }
-
-// CRUD DA ENTISDADE USUARIO
 
 // endpoint CRIAR usuario em json - POST
 func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 	// define struct que vai receber o body Request
 	var requestBody struct {
-		Uid    string `json:"uid"`
 		Login  string `json:"login"`
 		Senha  string `json:"senha"`
 		Nome   string `json:"nome"`
@@ -48,14 +39,11 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 
 	// chamar service para criar
 	err = servicos.CriarUsuarios(modelos.Usuario{
-		Uid:    requestBody.Uid,
 		Login:  requestBody.Login,
 		Senha:  requestBody.Senha,
 		Nome:   requestBody.Nome,
 		Perfil: requestBody.Perfil,
 	})
-
-	
 	// confirmação do service
 	if err != nil {
 		log.Printf("Error: %s", err.Error())
@@ -88,21 +76,17 @@ func ListarUsuarios(res http.ResponseWriter, req *http.Request) {
 
 // endpoint EXIBIR usuario em json
 func ExibirUsuarios(res http.ResponseWriter, req *http.Request) {
-	// extrair o json do body
-	var requestBody struct {
-		Uid string `json:"uid"`
-	}
+	uid := req.PathValue("uid")
 
-	err := json.NewDecoder(req.Body).Decode(&requestBody)
-	if err != nil {
-		log.Printf("Error: %s", err.Error())
+	if uid == "" {
+		log.Printf("Error: Uid vazio")
 		res.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(res).Encode(map[string]string{"error": "falha na requisição"})
+		json.NewEncoder(res).Encode(map[string]string{"error": "Uid vazio"})
 		return
 	}
 
 	// chama service
-	usuario, err := servicos.ExibirUsuario(requestBody.Uid)
+	usuario, err := servicos.ExibirUsuario(uid)
 	// confirmação  do service
 	if err != nil {
 		log.Printf("Error: %s", err.Error())
@@ -118,9 +102,10 @@ func ExibirUsuarios(res http.ResponseWriter, req *http.Request) {
 
 // endpoint EDITAR usuario em json
 func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
+	// pega paramento do uid
+	uid := req.PathValue("uid")
 	// definir estrutura que vai recebcer o json
 	var requestBody struct {
-		Uid    string `json:"uid"`
 		Login  string `json:"login"`
 		Senha  string `json:"senha"`
 		Nome   string `json:"nome"`
@@ -137,7 +122,7 @@ func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
 
 	// chamar service
 	err = servicos.EditarUsuarios(modelos.Usuario{
-		Uid:    requestBody.Uid,
+		Uid:    uid,
 		Login:  requestBody.Login,
 		Senha:  requestBody.Senha,
 		Nome:   requestBody.Nome,
@@ -160,19 +145,17 @@ func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
 func DeletarUsuarios(res http.ResponseWriter, req *http.Request) {
 	// extrai json do body
 
-	var requestBody struct {
-		Uid string `json:"uid"`
-	}
+	uid := req.PathValue("uid")
 
-	err := json.NewDecoder(req.Body).Decode(&requestBody)
-	if err != nil {
-		log.Printf("Error: %s", err.Error())
+	if uid == "" {
+		log.Printf("Error Parametro inválido")
 		res.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(res).Encode(map[string]string{"error": "falha na requisição"})
+		json.NewEncoder(res).Encode(map[string]string{"error": "Parâmetro Inválido"})
+		return
 	}
 
 	// chamar service para deletar usuario por id
-	err = servicos.DeletarUsuarios(requestBody.Uid)
+	err := servicos.DeletarUsuarios(uid)
 	// confirmação  do service
 	if err != nil {
 		log.Printf("Error: %s", err.Error())
