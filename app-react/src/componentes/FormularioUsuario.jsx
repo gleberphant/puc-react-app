@@ -1,6 +1,7 @@
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
+import { CriarUsuario, EditarUsuario } from "../servicos/usuarios";
 
-export default function FormularioUsuario({ usuario, handleSubmit }) {
+export default function FormularioUsuario({ usuario, fechar }) {
   const enviaFormulario = async (e) => {
     e.preventDefault();
 
@@ -15,9 +16,19 @@ export default function FormularioUsuario({ usuario, handleSubmit }) {
       Perfil: f.get("perfil"),
     };
 
-    console.log("usuario selecionado", novoUsuario);
+    let err;
 
-    await handleSubmit(novoUsuario);
+    if (novoUsuario.Uid == "") {
+      [, err] = await CriarUsuario(novoUsuario);
+    } else {
+      [, err] = await EditarUsuario(novoUsuario);
+    }
+
+    if (err != null) {
+      alert("Falha no cadastro: ", err);
+    }
+
+    fechar();
   };
 
   return (

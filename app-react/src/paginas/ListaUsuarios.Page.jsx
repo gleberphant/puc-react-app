@@ -1,31 +1,37 @@
 import { useEffect, useState } from "react";
-import {
-  EditarUsuario,
-  ExcluirUsuario,
-  ListarUsuarios,
-} from "../servicos/usuarios";
+import { ExcluirUsuario, ListarUsuarios } from "../servicos/usuarios";
 import { Button, Modal, Spinner, Table } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import "../estilos/ListaUsuarios.Page.css";
 import Carregando from "../componentes/Carregando";
-import ModalUsuario from "../componentes/ModalUsuario";
+import DetalhesUsuario from "../componentes/DetalhesUsuario";
 import FormularioUsuario from "../componentes/FormularioUsuario";
 
 export default function ListarUsuariosPage() {
   const [listaUsuarios, setListaUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [excluindo, setExcluindo] = useState(false);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
+  const [verDetalhes, setVerDetalhes] = useState(false);
+  const [verEdicao, setVerEdicao] = useState(false);
 
+  // construtor e destrutor do componente
   useEffect(() => {
     const carregarLista = async () => {
-      console.info("Montando a Página de Lista de Usuários");
+      console.info("Montando a Página Lista de Usuários");
       setCarregando(true);
-      const [lista, err] = await ListarUsuarios();
-      setCarregando(false);
 
-      if (err != null) setListaUsuarios([]);
-      else setListaUsuarios(lista);
+      let [lista, err] = await ListarUsuarios();
+
+      if (err != null) {
+        alert("Falha no carregamento da lista");
+        setListaUsuarios([]);
+      } else {
+        setListaUsuarios(lista);
+      }
+
+      setCarregando(false);
     };
 
     carregarLista();
@@ -35,19 +41,30 @@ export default function ListarUsuariosPage() {
     };
   }, []);
 
+  const RecarregarLista = async () => {
+    setCarregando(true);
+
+    let [lista, err] = await ListarUsuarios();
+
+    if (err != null) {
+      alert("Falha no carregamento da lista");
+      setListaUsuarios([]);
+    } else {
+      setListaUsuarios(lista);
+    }
+
+    setCarregando(false);
+  };
+
   const acaoExcluirUsuario = async (usuario) => {
     setExcluindo(true);
-
-    const uid = usuario.Uid;
 
     if (!confirm(`Deseja realmente remover ${usuario.Nome} ?`)) {
       setExcluindo(false);
       return;
     }
 
-    let payload, err;
-
-    [, err] = await ExcluirUsuario(uid);
+    const [, err] = await ExcluirUsuario(usuario.Uid);
 
     setExcluindo(false);
 
@@ -56,45 +73,17 @@ export default function ListarUsuariosPage() {
       return;
     }
 
-    setCarregando(true);
-
-    [payload, err] = await ListarUsuarios();
-    setCarregando(false);
-
-    if (err != null) setListaUsuarios([]);
-    else setListaUsuarios(payload);
+    RecarregarLista();
   };
-
-  const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
-  const [show, setShow] = useState(false);
 
   const acaoVerDetalhes = (usuario) => {
     setUsuarioSelecionado(usuario);
-    setShow(true);
+    setVerDetalhes(true);
   };
-
-  const [editar, setEditar] = useState(false);
 
   const acaoEditar = (usuario) => {
     setUsuarioSelecionado(usuario);
-    setEditar(true);
-  };
-
-  const handleSubmit = async (novoUsuario) => {
-    let payload, err;
-
-    [, err] = await EditarUsuario(novoUsuario);
-
-    if (err != null) {
-      alert("Falha no cadastro: ", err);
-    }
-    setEditar(false);
-
-    [payload, err] = await ListarUsuarios();
-    setCarregando(false);
-
-    if (err != null) setListaUsuarios([]);
-    else setListaUsuarios(payload);
+    setVerEdicao(true);
   };
 
   if (carregando || listaUsuarios == null) return <Carregando></Carregando>;
@@ -102,21 +91,29 @@ export default function ListarUsuariosPage() {
   return (
     <>
       <div className="lista-usuarios">
-        <ModalUsuario
-          usuario={usuarioSelecionado}
-          visivel={show}
-          fecharModal={() => setShow(false)}
-        ></ModalUsuario>
+        <Modal show={verDetalhes} centered>
+          <Modal.Header>Detalhes do Usuário</Modal.Header>
+          <Modal.Body>
+            <DetalhesUsuario usuario={usuarioSelecionado}></DetalhesUsuario>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setVerDetalhes(false)}>fechar</Button>
+          </Modal.Footer>
+        </Modal>
 
-        <Modal show={editar}>
+        <Modal show={verEdicao} centered>
+          <Modal.Header>Editar Usuário</Modal.Header>
           <Modal.Body>
             <FormularioUsuario
               usuario={usuarioSelecionado}
-              handleSubmit={handleSubmit}
+              fechar={() => {
+                setVerEdicao(false);
+                RecarregarLista();
+              }}
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setEditar(false)}>fechar</Button>
+            <Button onClick={() => setVerEdicao(false)}>fechar</Button>
           </Modal.Footer>
         </Modal>
 

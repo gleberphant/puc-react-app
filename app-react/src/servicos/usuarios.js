@@ -73,6 +73,7 @@ export async function ListarUsuarios() {
     return [[...responseBody.usuarios], null];
   } catch (err) {
     console.error("Error na requisição ", err);
+
     return [null, err];
   }
 }

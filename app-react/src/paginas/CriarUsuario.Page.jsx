@@ -1,22 +1,27 @@
-import { CriarUsuario } from "../servicos/usuarios";
+import { Alert } from "react-bootstrap";
 import FormularioUsuario from "../componentes/FormularioUsuario";
+import { useState } from "react";
 
 export default function CadastroUsuarioPage() {
-  
-  const handleSubmit = async (novoUsuario) => {
-    const [, err] = await CriarUsuario(novoUsuario);
+  const [showAlert, setShowAlert] = useState(false);
 
-    if (err != null) {
-      alert("Falha no cadastro: ", err);
-    }
+  const handleSubmit = async () => {
+    setShowAlert(true);
   };
 
   return (
     <>
-      <FormularioUsuario
-        usuario={{}}
-        handleSubmit={handleSubmit}
-      ></FormularioUsuario>
+      <Alert
+        variant="success"
+        show={showAlert}
+        defaultShow={false}
+        transition={true}
+        dismissible
+        onClose={() => setShowAlert(false)}
+      >
+        <p>Usuario criado com sucesso</p>
+      </Alert>
+      <FormularioUsuario usuario={{}} fechar={handleSubmit}></FormularioUsuario>
     </>
   );
 }
