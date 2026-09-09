@@ -1,0 +1,16 @@
+.lista-usuarios{
+    padding: 8px;
+    text-align: center;
+}
+
+.lista-usuarios table{
+    padding: 8px;    
+    vertical-align: middle;
+}
+
+.lista-usuarios th{
+    padding: 12px;    
+}
+
+
+

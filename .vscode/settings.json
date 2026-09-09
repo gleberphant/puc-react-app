@@ -26,5 +26,8 @@
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",
     "typescript": "typescriptreact"
+  },
+  "chat.tools.terminal.autoApprove": {
+    "npm --prefix app-react": true
   }
 }

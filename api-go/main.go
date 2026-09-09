@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gleberphant/puc-react-app/api-go/intermediarios"
 	"github.com/gleberphant/puc-react-app/api-go/manipuladores"
@@ -14,15 +15,29 @@ const (
 )
 
 func main() {
-	handlerComCORS := intermediarios.LogMidleware(
-		intermediarios.AuthMidleware(
-			intermediarios.CorsMiddleware(manipuladores.ConfiguraRotas()),
+	roteador := http.NewServeMux()
+
+	manipuladores.InjetarRotasLogin(roteador)
+	manipuladores.InjetarRotasPage(roteador)
+	manipuladores.InjetarRotasUsuarios(roteador)
+
+	handler := intermediarios.ApplicationMiddleware(
+		intermediarios.LogMidleware(
+			intermediarios.AuthMidleware(
+				roteador,
+			),
 		),
 	)
+	handler = intermediarios.CorsMiddleware(handler)
 
 	servidor := http.Server{
-		Addr:    PORTA,
-		Handler: handlerComCORS,
+		Addr:              PORTA,
+		Handler:           handler,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+		MaxHeaderBytes:    1 << 20,
 	}
 
 	log.Printf("\n Starting API server. Ambiente %s \n", AMBIENTE)

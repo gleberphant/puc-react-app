@@ -15,11 +15,13 @@ Desenvolvido por HANDERSON GLEBER (gr4v4t1nh4)
 
 
 
-## 🐙 Descrição
+## 🐙 Objetivo do projeto (Descrição)
 
 Atividades práticas da disciplina de `Dev Ops e de Desenvolvimento WEB`, do curso de Análise e Desenvolvimento de Sistemas da PUC PR. 
 
-## 💻 Pré-requisitos
+
+
+## 💻 Tecnologias utilizadas( Pré-requisitos)
 
 Antes de começar, verifique os requisitos do projeto:
 
@@ -35,17 +37,11 @@ Em um terminal de comando digite :
 Docker run -it -p 8080:8080 -p 3000:3000 -p 22:22 -v $(pwd):/app -w /app --name meu-app-dev-run meu-app-dev-image
 ```
 
-## 📫 Contribuindo com o projeto
+### 🚀 Como executar
 
-Para contribuir com o projeto, siga estas etapas:
 
-1. Bifurque este repositório.
-2. Crie um branch: `git checkout -b <nome_branch>`.
-3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
-4. Envie para o branch original: `git push origin <nome_do_projeto> / <local>`
-5. Crie a solicitação de pull.
+### 🚀 Como testar 
 
-Consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## 😄 Autor
 

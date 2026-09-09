@@ -1,10 +1,33 @@
 package repositorios
 
-import "github.com/gleberphant/puc-react-app/api-go/modelos"
+import (
+	"github.com/gleberphant/puc-react-app/api-go/modelos"
+)
 
-var MockUsuarioDB = []modelos.Usuario{
-	{Login: "admin@admin", Senha: "admin"},
-	{Login: "eduardo.lino@pucpr.br", Senha: "123456"},
-	{Login: "maria@pucpr.br", Senha: "123456"},
-	{Login: "joao@pucpr.br", Senha: "123456"},
+var repoUsuario = []modelos.Usuario{
+	{
+		Uid:    "00000000-0000-0000-0000-000000000000",
+		Login:  "admin@admin",
+		Senha:  "admin",
+		Nome:   "Adminsitrador",
+		Perfil: "Admin",
+	},
+	{
+		Uid:    "c6f23200-df9d-45a8-996e-2b92afd6a215",
+		Login:  "usuario",
+		Senha:  "123456",
+		Nome:   "Usuario",
+		Perfil: "Usuario",
+	},
+	{
+		Uid:    "7746da64-fc2e-429b-aa17-c1c4b4c76962",
+		Login:  "usuario",
+		Senha:  "123456",
+		Nome:   "Usuario",
+		Perfil: "Usuario",
+	},
+}
+
+func RepositorioUsuariosMock() []modelos.Usuario {
+	return repoUsuario
 }

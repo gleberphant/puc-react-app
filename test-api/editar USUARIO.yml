@@ -1,0 +1,26 @@
+info:
+  name: editar USUARIO
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:4000/usuario/1
+  body:
+    type: json
+    data: |-
+      {
+        "Uid": "2",
+        "Login": "{{$randomEmail}}",
+        "Senha": "{{$randomPassword}}",
+        "Nome": "{{$randomFullName}}",
+        "Perfil": "editado"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

@@ -1,40 +1,32 @@
-import { useState } from "react";
+import PUCBRASAO from "../assets/images/pucpr-brasao-redondo.png";
 import { Container, Card, Button, Form } from "react-bootstrap";
-import { fazerLogin } from "../servicos/autenticacao";
+import "../estilos/Login.Page.css";
 
-const handleSubmit = async (login, senha, event) => {
-  event.preventDefault();
+export default function LoginPage({ login }) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const err = await fazerLogin(login, senha);
+    const f = new FormData(e.target);
 
-  if (err != null) {
-    alert(err);
-    return;
-  }
+    console.log("email", f.get("login"), "senha", f.get("senha"));
 
-  window.location.reload();
-};
-
-export default function LoginPage() {
-  const [login, setLogin] = useState("");
-  const [senha, setSenha] = useState("");
+    login(f.get("login"), f.get("senha"));
+  };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
-      <Card
-        style={{ width: "100%", maxWidth: "420px" }}
-        className="p-4 shadow-sm border rounded-4"
-      >
-        <h4 className="text-center mb-4">Acesso ao Sistema</h4>
+    <Container fluid className="login-page">
+      <Card className="login-card">
+        <img className="login-logo" src={PUCBRASAO} alt="Brasão da PUCPR" />
 
-        <Form onSubmit={(e) => handleSubmit(login, senha, e)}>
+        <h4 className="text-center mb-4">Sistemas Web Seguros</h4>
+
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
-              type="email"
-              value={login}
-              placeholder="Digite seu email"
-              onChange={(e) => setLogin(e.target.value)}
+              name="login"
+              type="text"
+              placeholder="Digite seu Login"
               required
             />
           </Form.Group>
@@ -42,10 +34,9 @@ export default function LoginPage() {
           <Form.Group className="mb-3" controlId="formGroupSenha">
             <Form.Label>Senha</Form.Label>
             <Form.Control
+              name="senha"
               type="password"
-              value={senha}
               placeholder="Password"
-              onChange={(e) => setSenha(e.target.value)}
               required
             />
           </Form.Group>
@@ -54,8 +45,12 @@ export default function LoginPage() {
             <Form.Check type="checkbox" label="Não sou robô" required />
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="w-100">
-            Enviar
+          <Button
+            className="d-block mx-auto px-5"
+            variant="crimson"
+            type="submit"
+          >
+            Entrar
           </Button>
         </Form>
       </Card>

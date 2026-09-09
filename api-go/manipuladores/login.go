@@ -2,30 +2,19 @@ package manipuladores
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
-	"github.com/gleberphant/puc-react-app/api-go/repositorios"
+	"github.com/gleberphant/puc-react-app/api-go/servicos"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// devolve o formulario
-func LoginGet(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("formulario login"))
+func InjetarRotasLogin(roteador *http.ServeMux) {
+	roteador.HandleFunc("POST /login", LoginPost)
 }
 
-// recebe login e senha no body da requisição
-// verifica se usuairo existe
-// devolve jwt
-
 func LoginPost(res http.ResponseWriter, req *http.Request) {
-	// Limita o body a 1MB para não travar servidor
-	req.Body = http.MaxBytesReader(res, req.Body, 1048576)
-	defer req.Body.Close()
-
-	// define o header da resposta
-	res.Header().Set("Content-Type", "application/json")
-
 	// define struct que vai receber o request
 	var requestBody struct {
 		Login string `json:"login"`
@@ -35,23 +24,17 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 	// extrai login e senha do body
 	err := json.NewDecoder(req.Body).Decode(&requestBody)
 	if err != nil {
+		log.Printf("Error Decoder: %s", err.Error())
 		res.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
-	var usuarioEncontrado bool = false
-
-	// verifica se usuario existe
-	for _, v := range repositorios.MockUsuarioDB {
-		if v.Login == requestBody.Login && v.Senha == requestBody.Senha {
-			// usuario existe
-			usuarioEncontrado = true
-			break
-		}
-	}
-
-	if !usuarioEncontrado {
+	// chama o service
+	usuarioLogado, err := servicos.VerificaLoginSenha(requestBody.Login, requestBody.Senha)
+	// confirmação do service
+	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(res).Encode(map[string]string{"error": "Usuario não autorizado"})
 		return
@@ -66,13 +49,25 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 			"iat":    time.Now().Unix(),
 		})
 
+	// transforma em strings
 	tokenString, err := tokenJwt.SignedString([]byte("minha-senha-secreta"))
 	if err != nil {
+		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(res).Encode(map[string]string{"error": err.Error()})
+		json.NewEncoder(res).Encode(map[string]string{"error": "Erro ao gerar Token "})
 		return
 	}
 
+	// responde ao cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]string{"origin": "go", "token": tokenString})
+
+	/* 	responseBody := struct {
+	   		usuario map[string]string
+	   		token   string
+	   	}{
+	   		usuario: usuarioLogado,
+	   		token:   tokenString,
+	   	}
+	*/
+	json.NewEncoder(res).Encode(map[string]any{"usuario": usuarioLogado, "token": tokenString})
 }

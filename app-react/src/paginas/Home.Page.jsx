@@ -1,25 +1,24 @@
-import { Container, Card, Button } from "react-bootstrap";
-import { fazerLogout } from "../servicos/autenticacao";
+import { Button, Card } from "react-bootstrap";
 
-const onClickLogout = () => {
-  fazerLogout();
-  window.location.reload();
-};
-
-export default function HomePage() {
+export default function HomePage({ logout, usuarioLogado }) {
   return (
     <>
-      <Container className="d-flex align-items-center justify-content-center min-vh-100">
-        <Card
-          style={{ width: "100%", maxWidth: "420px" }}
-          className="p-4 shadow-sm border rounded-4"
-        >
-          <h1>LOGIN REALIZADO COM SUCESSO</h1>
-          <p>
-            <Button onClick={onClickLogout}> Clique para Sair </Button>
-          </p>
-        </Card>
-      </Container>
+      <Card>
+        <Card.Header>
+          <h1>Bem Vindo {usuarioLogado.Nome}</h1>
+        </Card.Header>
+        <Card.Body>
+          <p>Email: {usuarioLogado.Email}</p>
+          <p>Nome: {usuarioLogado.Nome}</p>
+          <p>Perfil: {usuarioLogado.Perfil}</p>
+        </Card.Body>
+        <Card.Footer>
+          <Button variant="outline-danger" onClick={logout}>
+            Clique para Sair
+          </Button>
+        </Card.Footer>
+      </Card>
+      <p></p>
     </>
   );
 }
