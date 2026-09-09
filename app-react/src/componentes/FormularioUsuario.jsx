@@ -45,7 +45,6 @@ export default function FormularioUsuario({ usuario, fechar }) {
               defaultValue={usuario?.Uid ?? ""}
               readOnly
               plaintext
-              required
             />
           </Col>
         </Form.Group>
@@ -76,7 +75,7 @@ export default function FormularioUsuario({ usuario, fechar }) {
               name="senha"
               placeholder="Senha"
               defaultValue={usuario?.Senha ?? ""}
-              type="text"
+              type="password"
               required
             ></Form.Control>
           </Col>
@@ -130,7 +129,7 @@ export default function FormularioUsuario({ usuario, fechar }) {
         </Form.Group>
 
         <Button variant="crimson" type="submit">
-          Enviar
+          {usuario.Uid ? "Salvar alterações" : "Criar usuário"}
         </Button>
       </Form>
     </>

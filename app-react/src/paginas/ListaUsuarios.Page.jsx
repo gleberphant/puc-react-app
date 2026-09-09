@@ -1,12 +1,14 @@
+import "../estilos/ListaUsuarios.Page.css";
+
+// dependências
 import { useEffect, useState } from "react";
 import { ExcluirUsuario, ListarUsuarios } from "../servicos/usuarios";
-import { Button, Modal, Spinner, Table } from "react-bootstrap";
-import "bootstrap-icons/font/bootstrap-icons.css";
-
-import "../estilos/ListaUsuarios.Page.css";
+import { Button, Spinner, Table } from "react-bootstrap";
 import Carregando from "../componentes/Carregando";
-import DetalhesUsuario from "../componentes/DetalhesUsuario";
-import FormularioUsuario from "../componentes/FormularioUsuario";
+
+// paginas
+import EditarUsuarioModal from "./EditarUsuario.Modal";
+import ExibirUsuarioModal from "./ExibirUsuario.Modal";
 
 export default function ListarUsuariosPage() {
   const [listaUsuarios, setListaUsuarios] = useState([]);
@@ -91,31 +93,20 @@ export default function ListarUsuariosPage() {
   return (
     <>
       <div className="lista-usuarios">
-        <Modal show={verDetalhes} centered>
-          <Modal.Header>Detalhes do Usuário</Modal.Header>
-          <Modal.Body>
-            <DetalhesUsuario usuario={usuarioSelecionado}></DetalhesUsuario>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={() => setVerDetalhes(false)}>fechar</Button>
-          </Modal.Footer>
-        </Modal>
+        <ExibirUsuarioModal
+          usuarioSelecionado={usuarioSelecionado}
+          show={verDetalhes}
+          fechar={() => setVerDetalhes(false)}
+        />
 
-        <Modal show={verEdicao} centered>
-          <Modal.Header>Editar Usuário</Modal.Header>
-          <Modal.Body>
-            <FormularioUsuario
-              usuario={usuarioSelecionado}
-              fechar={() => {
-                setVerEdicao(false);
-                RecarregarLista();
-              }}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={() => setVerEdicao(false)}>fechar</Button>
-          </Modal.Footer>
-        </Modal>
+        <EditarUsuarioModal
+          usuarioSelecionado={usuarioSelecionado}
+          show={verEdicao}
+          fechar={() => {
+            setVerEdicao(false);
+            RecarregarLista();
+          }}
+        />
 
         <Table striped hover size="sm">
           <thead>

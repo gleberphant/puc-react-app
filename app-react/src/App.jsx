@@ -1,5 +1,6 @@
 // estilos
 import "./estilos/App.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 // dependencias
 import { useState } from "react";

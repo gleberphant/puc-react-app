@@ -1,29 +1,29 @@
 import { Table } from "react-bootstrap";
 
-export default function DetalhesUsuario({ usuario }) {
+export default function DetalhesUsuario({ usuarioSelecionado }) {
   return (
     <>
       <Table striped hover size="md">
         <tbody>
           <tr>
             <th>Uid:</th>
-            <td>{usuario?.Uid ?? ""}</td>
+            <td>{usuarioSelecionado?.Uid ?? ""}</td>
           </tr>
           <tr>
             <th>Nome Completo:</th>
-            <td>{usuario?.Nome ?? ""}</td>
+            <td>{usuarioSelecionado?.Nome ?? ""}</td>
           </tr>
           <tr>
             <th>Email:</th>
-            <td>{usuario?.Email ?? ""}</td>
+            <td>{usuarioSelecionado?.Email ?? ""}</td>
           </tr>
           <tr>
             <th>Login:</th>
-            <td>{usuario?.Login ?? ""}</td>
+            <td>{usuarioSelecionado?.Login ?? ""}</td>
           </tr>
           <tr>
             <th>Perfil:</th>
-            <td>{usuario?.Perfil ?? ""}</td>
+            <td>{usuarioSelecionado?.Perfil ?? ""}</td>
           </tr>
         </tbody>
       </Table>
