@@ -41,11 +41,13 @@ export function Cabecalho({ logout, usuarioLogado }) {
               placement="bottom"
               overlay={
                 <Popover id="popover-positioned-bottom">
-                  <Popover.Header as="h3">{usuarioLogado.Email}</Popover.Header>
+                  <Popover.Header as="h3">
+                    {usuarioLogado?.Email ?? ""}
+                  </Popover.Header>
                   <Popover.Body>
-                    <p>Email:{usuarioLogado.Email}</p>
-                    <p>Nome:{usuarioLogado.Nome}</p>
-                    <p>Perfil:{usuarioLogado.Perfil}</p>
+                    <p>Email:{usuarioLogado?.Email ?? ""}</p>
+                    <p>Nome:{usuarioLogado?.Nome ?? ""}</p>
+                    <p>Perfil:{usuarioLogado?.Perfil ?? ""}</p>
                   </Popover.Body>
                 </Popover>
               }

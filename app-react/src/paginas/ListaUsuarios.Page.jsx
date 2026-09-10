@@ -1,129 +1,183 @@
-import { useEffect, useState } from "react";
-import { ExcluirUsuario, ListarUsuarios } from "../servicos/usuarios";
-import { Button, Spinner, Table } from "react-bootstrap";
-import "bootstrap-icons/font/bootstrap-icons.css";
-
 import "../estilos/ListaUsuarios.Page.css";
-import Carregando from "../componentes/Carregando";
-import ModalUsuario from "../componentes/ModalUsuario";
 
-export default function ListarUsuariosPage() {
+import { useEffect, useState } from "react";
+import { Button, Spinner, Table } from "react-bootstrap";
+
+import {
+  EditarUsuario,
+  ExcluirUsuario,
+  ListarUsuarios,
+} from "../servicos/usuarios";
+
+import Carregando from "../componentes/Carregando";
+import EditarUsuarioModal from "./EditarUsuario.Modal";
+import ExibirUsuarioModal from "./ExibirUsuario.Modal";
+
+export default function ListaUsuariosPage() {
   const [listaUsuarios, setListaUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [excluindo, setExcluindo] = useState(false);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
+  const [modalAberta, setModalAberta] = useState(null);
+
+  const carregarLista = async () => {
+    setCarregando(true);
+
+    const [lista, erro] = await ListarUsuarios();
+
+    if (erro) {
+      setListaUsuarios([]);
+      alert(`Falha no carregamento da lista: ${erro.message}`);
+    } else {
+      setListaUsuarios(lista);
+    }
+
+    setCarregando(false);
+  };
 
   useEffect(() => {
-    const carregarLista = async () => {
-      console.info("Montando a Página de Lista de Usuários");
+    const carregarListaInicial = async () => {
       setCarregando(true);
-      const [lista, err] = await ListarUsuarios();
+
+      const [lista, erro] = await ListarUsuarios();
+
+      if (erro) {
+        setListaUsuarios([]);
+        alert(`Falha no carregamento da lista: ${erro.message}`);
+      } else {
+        setListaUsuarios(lista);
+      }
+
       setCarregando(false);
-
-      if (err != null) setListaUsuarios([]);
-      else setListaUsuarios(lista);
     };
 
-    carregarLista();
-
-    return () => {
-      console.info("Desmontando Página de Lista de Usuários");
-    };
+    carregarListaInicial();
   }, []);
 
-  const acaoExcluirUsuario = async (usuario) => {
-    setExcluindo(true);
+  const abrirDetalhes = (usuario) => {
+    setUsuarioSelecionado(usuario);
+    setModalAberta("detalhes");
+  };
 
-    const uid = usuario.Uid;
+  const abrirEdicao = (usuario) => {
+    setUsuarioSelecionado(usuario);
+    setModalAberta("edicao");
+  };
 
-    if (!confirm(`Deseja realmente remover ${usuario.Nome} ?`)) {
-      setExcluindo(false);
+  const fecharModal = () => {
+    setModalAberta(null);
+  };
+
+  const salvarEdicao = async (usuario) => {
+    const [, erro] = await EditarUsuario(usuario);
+
+    if (erro) {
+      alert(`Falha ao editar usuário: ${erro.message}`);
+      return false;
+    }
+
+    await carregarLista();
+    return true;
+  };
+
+  const excluirUsuario = async (usuario) => {
+    if (!window.confirm(`Deseja realmente remover ${usuario.Nome}?`)) {
       return;
     }
 
-    let payload, err;
+    setExcluindo(true);
 
-    [, err] = await ExcluirUsuario(uid);
+    const [, erro] = await ExcluirUsuario(usuario.Uid);
 
     setExcluindo(false);
 
-    if (err != null) {
-      alert(`Falha ao deletar usuario: ${err.message}`);
+    if (erro) {
+      alert(`Falha ao excluir usuário: ${erro.message}`);
       return;
     }
 
-    setCarregando(true);
-
-    [payload, err] = await ListarUsuarios();
-    setCarregando(false);
-
-    if (err != null) setListaUsuarios([]);
-    else setListaUsuarios(payload);
+    await carregarLista();
   };
 
-  const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
-  const [show, setShow] = useState(false);
-
-  const acaoVerDetalhes = (usuario) => {
-    setUsuarioSelecionado(usuario);
-    setShow(true);
-  };
-
-  if (carregando || listaUsuarios == null) return <Carregando></Carregando>;
+  if (carregando) {
+    return <Carregando />;
+  }
 
   return (
-    <>
-      <div className="lista-usuarios">
-        <ModalUsuario
-          usuario={usuarioSelecionado}
-          visivel={show}
-          fecharModal={() => setShow(false)}
-        ></ModalUsuario>
-        <Table striped hover size="sm">
-          <thead>
-            <tr>
-              <th>Login</th>
-              <th>Nome Completo</th>
-              <th>Email</th>
-              <th>Perfil</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {listaUsuarios.map((u) => {
-              return (
-                <tr key={u.Uid}>
-                  <td>{u.Login}</td>
-                  <td>{u.Nome}</td>
-                  <td>{u.Email}</td>
-                  <td>{u.Perfil}</td>
-                  <td>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      onClick={() => acaoVerDetalhes(u)}
-                      aria-label="Ver detalhes"
-                      className="bi bi-eye-fill"
-                      style={{ fontSize: "24px" }}
-                    />
+    <div className="lista-usuarios">
+      <ExibirUsuarioModal
+        usuarioSelecionado={usuarioSelecionado}
+        show={modalAberta === "detalhes"}
+        fechar={fecharModal}
+      />
 
-                    {!excluindo ? (
-                      <Button
-                        variant="link"
-                        onClick={() => acaoExcluirUsuario(u)}
-                        aria-label="Excluir Usuario"
-                        className="bi bi-person-x-fill"
-                        style={{ fontSize: "24px", color: "crimson" }}
-                      />
-                    ) : (
-                      <Spinner animation="border" size="sm" role="status" />
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </div>
-    </>
+      <EditarUsuarioModal
+        key={usuarioSelecionado?.Uid ?? "edicao"}
+        usuarioSelecionado={usuarioSelecionado}
+        show={modalAberta === "edicao"}
+        fechar={fecharModal}
+        onSubmit={salvarEdicao}
+      />
+
+      <Table striped hover size="sm">
+        <thead>
+          <tr>
+            <th>Login</th>
+            <th>Nome completo</th>
+            <th>E-mail</th>
+            <th>Perfil</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {listaUsuarios.map((usuario) => (
+            <tr key={usuario.Uid}>
+              <td>{usuario.Login}</td>
+              <td>{usuario.Nome}</td>
+              <td>{usuario.Email}</td>
+              <td>{usuario.Perfil}</td>
+              <td>
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => abrirDetalhes(usuario)}
+                  aria-label={`Ver detalhes de ${usuario.Nome}`}
+                  className="bi bi-eye-fill"
+                  style={{ fontSize: "24px" }}
+                />
+
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => abrirEdicao(usuario)}
+                  aria-label={`Editar ${usuario.Nome}`}
+                  className="bi bi-pen-fill"
+                  style={{ fontSize: "22px", color: "orange" }}
+                />
+
+                {!excluindo ? (
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => excluirUsuario(usuario)}
+                    aria-label={`Excluir ${usuario.Nome}`}
+                    className="bi bi-person-x-fill"
+                    style={{ fontSize: "24px", color: "crimson" }}
+                  />
+                ) : (
+                  <Spinner
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-label="Excluindo usuário"
+                  />
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
   );
 }

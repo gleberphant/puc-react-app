@@ -25,6 +25,7 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Login  string `json:"login"`
 		Senha  string `json:"senha"`
 		Nome   string `json:"nome"`
+		Email  string `json:"email"`
 		Perfil string `json:"perfil"`
 	}
 
@@ -42,6 +43,7 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Login:  requestBody.Login,
 		Senha:  requestBody.Senha,
 		Nome:   requestBody.Nome,
+		Email:  requestBody.Email,
 		Perfil: requestBody.Perfil,
 	})
 	// confirmação do service
@@ -53,7 +55,7 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// enviar resposta para cliente
-	res.WriteHeader(http.StatusOK)
+	res.WriteHeader(http.StatusCreated)
 	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
 }
 
@@ -109,6 +111,7 @@ func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Login  string `json:"login"`
 		Senha  string `json:"senha"`
 		Nome   string `json:"nome"`
+		Email  string `json:"email"`
 		Perfil string `json:"perfil"`
 	}
 
@@ -126,6 +129,7 @@ func EditarUsuarios(res http.ResponseWriter, req *http.Request) {
 		Login:  requestBody.Login,
 		Senha:  requestBody.Senha,
 		Nome:   requestBody.Nome,
+		Email:  requestBody.Email,
 		Perfil: requestBody.Perfil,
 	})
 	// confirmação  do service

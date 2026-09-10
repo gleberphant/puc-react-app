@@ -1,18 +1,37 @@
-import PUCBRASAO from "../assets/images/pucpr-brasao-redondo.png";
-import { Container, Card, Button, Form } from "react-bootstrap";
+//estilos
 import "../estilos/Login.Page.css";
+import PUCBRASAO from "../assets/images/pucpr-brasao-redondo.png";
 
-export default function LoginPage({ login }) {
+//dependencias
+import { Container, Card, Button, Form } from "react-bootstrap";
+import { useState } from "react";
+
+//meus componentes
+import Carregando from "../componentes/Carregando";
+import { fazerLogin } from "../servicos/autenticacao";
+
+export default function LoginPage({ loginCallback }) {
+  const [carregando, setCarregando] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setCarregando(true);
+
     const f = new FormData(e.target);
+    const usuario = await fazerLogin(f.get("login"), f.get("senha"));
 
-    console.log("email", f.get("login"), "senha", f.get("senha"));
+    if (usuario == null) {
+      alert("Não foi possível realizar login");
+      setCarregando(false);
+      return;
+    }
 
-    login(f.get("login"), f.get("senha"));
+    loginCallback(usuario);
+    setCarregando(false);
   };
 
+  if (carregando) return <Carregando></Carregando>;
   return (
     <Container fluid className="login-page">
       <Card className="login-card">

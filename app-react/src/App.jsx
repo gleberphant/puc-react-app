@@ -1,5 +1,6 @@
 // estilos
 import "./estilos/App.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 // dependencias
 import { useState } from "react";
@@ -11,36 +12,25 @@ import HomePage from "./paginas/Home.Page";
 import LoginPage from "./paginas/Login.Page";
 import LayoutPage from "./paginas/Layout.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
-import CadastroUsuarioPage from "./paginas/CadastroUsuario.Page.jsx";
+import CadastroUsuarioPage from "./paginas/CriarUsuario.Page.jsx";
 import ListarUsuariosPage from "./paginas/ListaUsuarios.Page.jsx";
 import Carregando from "./componentes/Carregando.jsx";
 
 export default function App() {
   const [logado, setLogado] = useState(false);
-  const [usuarioLogado, setUsuarioLogado] = useState({});
-  const [carregando, setCarregando] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   const logout = () => {
     fazerLogout();
     setLogado(false);
   };
 
-  const login = async (login, senha) => {
-    setCarregando(true);
-    const usuario = await fazerLogin(login, senha);
-
-    if (usuario == null) {
-      alert("não foi possível realizar login");
-      return;
-    }
-
+  const login = (usuario) => {
     setUsuarioLogado(usuario);
-    setCarregando(false);
     setLogado(true);
   };
 
-  if (carregando) return <Carregando></Carregando>;
-  if (logado)
+  if (logado || usuarioLogado != null)
     return (
       <BrowserRouter>
         <Routes>
@@ -65,7 +55,7 @@ export default function App() {
   else
     return (
       <>
-        <LoginPage login={login} />
+        <LoginPage loginCallback={login} />
       </>
     );
 }

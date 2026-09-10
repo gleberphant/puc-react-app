@@ -24,6 +24,7 @@ export async function CriarUsuario(novoUsuario) {
     const resposta = await fetch(ENDPOINT.CRIAR.URL(), {
       method: ENDPOINT.CRIAR.METODO,
       headers: {
+        "Content-Type": "application/json",
         Authorization: token,
       },
       body: JSON.stringify(novoUsuario),
@@ -32,14 +33,18 @@ export async function CriarUsuario(novoUsuario) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
     console.info("Response body: ", responseBody);
 
     return [resposta.status, null];
   } catch (err) {
-    console.error(err);
+    console.error("catch", err);
     return [null, err];
   }
 }
@@ -64,7 +69,11 @@ export async function ListarUsuarios() {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
     console.info("Response body: ", responseBody);
@@ -72,6 +81,46 @@ export async function ListarUsuarios() {
     return [[...responseBody.usuarios], null];
   } catch (err) {
     console.error("Error na requisição ", err);
+
+    return [null, err];
+  }
+}
+
+// editar usuario
+export async function EditarUsuario(novoUsuario) {
+  try {
+    console.info("Editando o usuario usuario ", novoUsuario);
+
+    const token = CheckToken();
+
+    if (!token) {
+      throw new Error("Token inválido");
+    }
+
+    const resposta = await fetch(ENDPOINT.EDITAR.URL(novoUsuario.Uid), {
+      method: ENDPOINT.EDITAR.METODO,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify(novoUsuario),
+    });
+
+    const responseBody = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
+    }
+
+    console.info("Response body: ", responseBody);
+
+    return [resposta.status, null];
+  } catch (err) {
+    console.error("catch", err);
     return [null, err];
   }
 }
@@ -79,8 +128,6 @@ export async function ListarUsuarios() {
 // deletar usuario
 export async function ExcluirUsuario(uid) {
   try {
-    console.info("Deletando usuario uid: ", uid);
-
     const token = CheckToken();
 
     if (!token) {
@@ -97,14 +144,16 @@ export async function ExcluirUsuario(uid) {
     const responseBody = await resposta.json();
 
     if (!resposta.ok) {
-      throw new Error(resposta.status, resposta.statusText, responseBody);
+      throw new Error(
+        `${resposta.status} ${resposta.statusText}: ${
+          responseBody.error ?? "Erro na requisição"
+        }`,
+      );
     }
 
-    console.info("Response body: ", responseBody);
-
     return [resposta.status, null];
-  } catch (err) {
-    console.error("Catch:", err);
-    return [null, err];
+  } catch (erro) {
+    console.error("Erro ao excluir usuário:", erro);
+    return [null, erro];
   }
 }

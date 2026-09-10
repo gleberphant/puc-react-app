@@ -4,8 +4,8 @@ import "net/http"
 
 func CorsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		// Origem permitida
-		res.Header().Set("Access-Control-Allow-Origin", "*")
+		// Origem permitida pelo frontend Vite.
+		res.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
 
 		// Métodos HTTP permitidos
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

@@ -10,14 +10,10 @@ var templates, _ = template.ParseGlob("./templates/*tmpl.html")
 func InjetarRotasPage(roteador *http.ServeMux) {
 	roteador.HandleFunc("GET /", PageIndex)
 	roteador.HandleFunc("GET /sobre", PageSobre)
-	roteador.HandleFunc("GET /login", PageLogin)
 }
 
 func PageIndex(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	//templates, _ := template.ParseFiles("./templates/index.tmpl.html")
-
 	if err := templates.ExecuteTemplate(res, "index", nil); err != nil {
 		http.Error(res, "não foi possível renderizar a página", http.StatusInternalServerError)
 		return
@@ -26,17 +22,7 @@ func PageIndex(res http.ResponseWriter, req *http.Request) {
 
 func PageSobre(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "text/html; charset=utf-8")
-	//templates, _ := template.ParseFiles("./templates/sobre.tmpl.html")
 	if err := templates.ExecuteTemplate(res, "sobre", nil); err != nil {
-		http.Error(res, "não foi possível renderizar a página", http.StatusInternalServerError)
-		return
-	}
-}
-
-func PageLogin(res http.ResponseWriter, req *http.Request) {
-	res.Header().Set("Content-Type", "text/html; charset=utf-8")
-	//templates, _ := template.ParseFiles("./templates/sobre.tmpl.html")
-	if err := templates.ExecuteTemplate(res, "login", nil); err != nil {
 		http.Error(res, "não foi possível renderizar a página", http.StatusInternalServerError)
 		return
 	}
