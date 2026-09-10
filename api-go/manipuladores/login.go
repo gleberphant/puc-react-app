@@ -60,14 +60,5 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 
 	// responde ao cliente
 	res.WriteHeader(http.StatusOK)
-
-	/* 	responseBody := struct {
-	   		usuario map[string]string
-	   		token   string
-	   	}{
-	   		usuario: usuarioLogado,
-	   		token:   tokenString,
-	   	}
-	*/
 	json.NewEncoder(res).Encode(map[string]any{"usuario": usuarioLogado, "token": tokenString})
 }

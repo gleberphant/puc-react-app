@@ -1,33 +1,24 @@
 # Desenvolvimento de uma API REST Segura para Gestão de Usuários
 
-> Ao final da atividade, espera-se que você desenvolva e apresente uma aplicação funcional que demonstre a implementação de operações CRUD (criação, consulta, atualização e exclusão) de usuários, a autenticação por meio de JWT (JSON Web Token), o controle de acesso baseado em perfis de usuário (Administrador, Operador e Cliente) e a proteção adequada dos endpoints da aplicação. Além disso, a solução deve evidenciar a aplicação de boas práticas de segurança no desenvolvimento de APIs, bem como a compreensão dos conceitos relacionados ao protocolo OAuth 2.0 e à análise de riscos envolvidos nos processos de autenticação e autorização.
+Ao final da atividade, espera-se que você desenvolva e apresente uma aplicação funcional que demonstre a implementação de operações CRUD (criação, consulta, atualização e exclusão) de usuários, a autenticação por meio de JWT (JSON Web Token), o controle de acesso baseado em perfis de usuário (Administrador, Operador e Cliente) e a proteção adequada dos endpoints da aplicação. Além disso, a solução deve evidenciar a aplicação de boas práticas de segurança no desenvolvimento de APIs, bem como a compreensão dos conceitos relacionados ao protocolo OAuth 2.0 e à análise de riscos envolvidos nos processos de autenticação e autorização.
 
  
 Como desenvolvedor(a), sua missão será criar uma solução completa que permita cadastrar, consultar, atualizar e excluir usuários, aplicando os conceitos estudados ao longo da disciplina sobre:
-
-APIs REST;
-Web Services;
-Autenticação;
-Autorização;
-Controle de acesso;
-Segurança de aplicações web.
+- APIs REST;
+- Web Services;
+- Autenticação;
+- Autorização;
+- Controle de acesso;
+- Segurança de aplicações web.
  
 
 Objetivo da atividade é desenvolver uma aplicação web funcional composta por:
-
-a) Back-end
-
-Uma API REST para gerenciamento de usuários.
-
-b)Front-end
-
-Uma interface web simples que permita utilizar e demonstrar os recursos da API.
-
- 
+- Back-end: Uma API REST para gerenciamento de usuários.
+- Front-end: Uma interface web simples que permita utilizar e demonstrar os recursos da API.
 
 O projeto deverá evidenciar a aplicação prática dos conceitos de autenticação, autorização e segurança estudados na disciplina.
 
-Sua aplicação deverá permitir que diferentes usuários realizem operações de acordo com seu perfil de acesso.
+- Sua aplicação deverá permitir que diferentes usuários realizem operações de acordo com seu perfil de acesso.
 
 A solução deverá conter as funcionalidades obrigatórias:
 

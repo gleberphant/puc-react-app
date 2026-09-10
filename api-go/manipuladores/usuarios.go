@@ -55,7 +55,7 @@ func CriarUsuarios(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// enviar resposta para cliente
-	res.WriteHeader(http.StatusOK)
+	res.WriteHeader(http.StatusCreated)
 	json.NewEncoder(res).Encode(map[string]string{"msg": "usuario criado com sucesso"})
 }
 
