@@ -22,7 +22,8 @@ export default function LoginPage({ loginCallback }) {
     const usuario = await fazerLogin(f.get("login"), f.get("senha"));
 
     if (usuario == null) {
-      alert("Não foi possível realizar login");
+      alert("NÃO POSSÍVEL REALIZAR LOGIN");
+      console.error("falha no login");
       setCarregando(false);
       return;
     }
@@ -72,6 +73,17 @@ export default function LoginPage({ loginCallback }) {
             Entrar
           </Button>
         </Form>
+        <Card.Footer>
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "12px",
+              paddingTop: "24px",
+            }}
+          >
+            Desenvolvido por Handerson Gleber de Lima Cavalcanti
+          </p>
+        </Card.Footer>
       </Card>
     </Container>
   );

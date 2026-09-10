@@ -3,7 +3,7 @@ const REQUEST_URL = "http://localhost:4000/login";
 // faz o request api/login e armazena o jwt no local storage
 export async function fazerLogin(login, senha) {
   try {
-    console.log("Fazendo login request em:", REQUEST_URL);
+    console.log("Fazendo login em:", REQUEST_URL);
 
     const resposta = await fetch(REQUEST_URL, {
       method: "POST",
@@ -13,17 +13,21 @@ export async function fazerLogin(login, senha) {
       body: JSON.stringify({ login: login, senha: senha }),
     });
 
-    // se status diferente de 200
-    if (!resposta.ok) {
-      console.error("Error:", resposta.status, resposta.statusText);
-      return null;
-    }
-
     const responseBody = await resposta.json();
 
+    // se status diferente de 200
+    if (!resposta.ok) {
+      throw new Error(
+        "Code:",
+        resposta.status,
+        resposta.statusText,
+        "Body",
+        responseBody,
+      );
+    }
+
     if (responseBody.token == null) {
-      console.error("Token Invalido");
-      return null;
+      throw new Error("Token inválido");
     }
 
     //  sucesso então armazena token no local Storage

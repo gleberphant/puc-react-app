@@ -5,7 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 // dependencias
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { fazerLogin, fazerLogout } from "./servicos/autenticacao.js";
+import { fazerLogout } from "./servicos/autenticacao.js";
 
 // minhas paginas
 import HomePage from "./paginas/Home.Page";
@@ -14,7 +14,6 @@ import LayoutPage from "./paginas/Layout.Page.jsx";
 import SobrePage from "./paginas/Sobre.Page.jsx";
 import CadastroUsuarioPage from "./paginas/CriarUsuario.Page.jsx";
 import ListarUsuariosPage from "./paginas/ListaUsuarios.Page.jsx";
-import Carregando from "./componentes/Carregando.jsx";
 
 export default function App() {
   const [logado, setLogado] = useState(false);
