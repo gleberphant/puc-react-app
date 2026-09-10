@@ -73,17 +73,15 @@ export default function LoginPage({ loginCallback }) {
             Entrar
           </Button>
         </Form>
-        <Card.Footer>
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: "12px",
-              paddingTop: "24px",
-            }}
-          >
-            Desenvolvido por Handerson Gleber de Lima Cavalcanti
-          </p>
-        </Card.Footer>
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: "12px",
+            paddingTop: "24px",
+          }}
+        >
+          Desenvolvido por Handerson Gleber de Lima Cavalcanti
+        </p>
       </Card>
     </Container>
   );
