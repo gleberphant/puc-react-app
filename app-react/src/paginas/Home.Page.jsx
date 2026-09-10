@@ -5,12 +5,12 @@ export default function HomePage({ logout, usuarioLogado }) {
     <>
       <Card>
         <Card.Header>
-          <h1>Bem Vindo {usuarioLogado.Nome}</h1>
+          <h1>Bem Vindo {usuarioLogado?.Nome}</h1>
         </Card.Header>
         <Card.Body>
-          <p>Email: {usuarioLogado.Email}</p>
-          <p>Nome: {usuarioLogado.Nome}</p>
-          <p>Perfil: {usuarioLogado.Perfil}</p>
+          <p>Email: {usuarioLogado?.Email}</p>
+          <p>Nome: {usuarioLogado?.Nome}</p>
+          <p>Perfil: {usuarioLogado?.Perfil}</p>
         </Card.Body>
         <Card.Footer>
           <Button variant="outline-danger" onClick={logout}>

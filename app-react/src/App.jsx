@@ -18,30 +18,19 @@ import Carregando from "./componentes/Carregando.jsx";
 
 export default function App() {
   const [logado, setLogado] = useState(false);
-  const [usuarioLogado, setUsuarioLogado] = useState({});
-  const [carregando, setCarregando] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   const logout = () => {
     fazerLogout();
     setLogado(false);
   };
 
-  const login = async (login, senha) => {
-    setCarregando(true);
-    const usuario = await fazerLogin(login, senha);
-
-    if (usuario == null) {
-      alert("não foi possível realizar login");
-      return;
-    }
-
+  const login = (usuario) => {
     setUsuarioLogado(usuario);
-    setCarregando(false);
     setLogado(true);
   };
 
-  if (carregando) return <Carregando></Carregando>;
-  if (logado)
+  if (logado || usuarioLogado != null)
     return (
       <BrowserRouter>
         <Routes>
@@ -66,7 +55,7 @@ export default function App() {
   else
     return (
       <>
-        <LoginPage login={login} />
+        <LoginPage loginCallback={login} />
       </>
     );
 }

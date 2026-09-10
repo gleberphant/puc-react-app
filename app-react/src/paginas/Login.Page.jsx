@@ -8,8 +8,9 @@ import { useState } from "react";
 
 //meus componentes
 import Carregando from "../componentes/Carregando";
+import { fazerLogin } from "../servicos/autenticacao";
 
-export default function LoginPage({ login }) {
+export default function LoginPage({ loginCallback }) {
   const [carregando, setCarregando] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -18,8 +19,16 @@ export default function LoginPage({ login }) {
     setCarregando(true);
 
     const f = new FormData(e.target);
+    const usuario = await fazerLogin(f.get("login"), f.get("senha"));
 
-    login(f.get("login"), f.get("senha"));
+    if (usuario == null) {
+      alert("Não foi possível realizar login");
+      setCarregando(false);
+      return;
+    }
+
+    loginCallback(usuario);
+    setCarregando(false);
   };
 
   if (carregando) return <Carregando></Carregando>;
