@@ -1,18 +1,20 @@
-# Desenvolvimento de uma API REST Segura para Gestão de Usuários
+# Visão geral do trabalho
 
-Ao final da atividade, espera-se que você desenvolva e apresente uma aplicação funcional que demonstre a implementação de operações CRUD (criação, consulta, atualização e exclusão) de usuários, a autenticação por meio de JWT (JSON Web Token), o controle de acesso baseado em perfis de usuário (Administrador, Operador e Cliente) e a proteção adequada dos endpoints da aplicação. Além disso, a solução deve evidenciar a aplicação de boas práticas de segurança no desenvolvimento de APIs, bem como a compreensão dos conceitos relacionados ao protocolo OAuth 2.0 e à análise de riscos envolvidos nos processos de autenticação e autorização.
+## Desenvolvimento de uma API REST Segura para Gestão de Usuários
 
- 
+> Ao final da atividade, espera-se que você desenvolva e apresente uma aplicação funcional que demonstre a implementação de operações CRUD (criação, consulta, atualização e exclusão) de usuários, a autenticação por meio de JWT (JSON Web Token), o controle de acesso baseado em perfis de usuário (Administrador, Operador e Cliente) e a proteção adequada dos endpoints da aplicação. Além disso, a solução deve evidenciar a aplicação de boas práticas de segurança no desenvolvimento de APIs, bem como a compreensão dos conceitos relacionados ao protocolo OAuth 2.0 e à análise de riscos envolvidos nos processos de autenticação e autorização.
+
 Como desenvolvedor(a), sua missão será criar uma solução completa que permita cadastrar, consultar, atualizar e excluir usuários, aplicando os conceitos estudados ao longo da disciplina sobre:
+
 - APIs REST;
 - Web Services;
 - Autenticação;
 - Autorização;
 - Controle de acesso;
 - Segurança de aplicações web.
- 
 
 Objetivo da atividade é desenvolver uma aplicação web funcional composta por:
+
 - Back-end: Uma API REST para gerenciamento de usuários.
 - Front-end: Uma interface web simples que permita utilizar e demonstrar os recursos da API.
 
@@ -22,32 +24,30 @@ O projeto deverá evidenciar a aplicação prática dos conceitos de autenticaç
 
 A solução deverá conter as funcionalidades obrigatórias:
 
-1) Cadastro de usuários: Permitir o registro de novos usuários contendo informações como: Nome; E-mail; Senha; Perfil de acesso.
+1. Cadastro de usuários: Permitir o registro de novos usuários contendo informações como: Nome; E-mail; Senha; Perfil de acesso.
 
-2) Consulta de usuários: Permitir listar os usuários cadastrados. Por exemplo: Listar todos os usuários; consultar um usuário específico.
+2. Consulta de usuários: Permitir listar os usuários cadastrados. Por exemplo: Listar todos os usuários; consultar um usuário específico.
 
-3) Atualização de usuários: Permitir alterar informações de um usuário já cadastrado. Por exemplo: Nome; E-mail; Perfil.
+3. Atualização de usuários: Permitir alterar informações de um usuário já cadastrado. Por exemplo: Nome; E-mail; Perfil.
 
-4) Exclusão de usuários: Permitir remover usuários do sistema.
+4. Exclusão de usuários: Permitir remover usuários do sistema.
 
-5) Login: Criar um endpoint responsável pela autenticação dos usuários. O login deverá validar e-mail; senha. Quando as credenciais forem válidas, a API deverá gerar um token JWT.
+5. Login: Criar um endpoint responsável pela autenticação dos usuários. O login deverá validar e-mail; senha. Quando as credenciais forem válidas, a API deverá gerar um token JWT.
 
- 
+## Parte 1 – Modelagem da API
 
-# Parte 1 – Modelagem da API
 No relatório ou documentação do projeto, apresente pelo menos quatro endpoints REST utilizados na solução.
 Para cada endpoint informe: Método HTTP; URL; Finalidade; Código de resposta esperado.
 
 Exemplo:
 
-Método  Endpoint        Finalidade          Resposta
-GET     /usuarios       Listar usuários     200 OK
-POST    /usuarios       Criar usuário       201 Created
-PUT     /usuarios/{id}  Atualizar usuário   200 OK
-DELETE  /usuarios/{id}  Excluir usuário     204 No Content
+Método Endpoint Finalidade Resposta
+GET /usuarios Listar usuários 200 OK
+POST /usuarios Criar usuário 201 Created
+PUT /usuarios/{id} Atualizar usuário 200 OK
+DELETE /usuarios/{id} Excluir usuário 204 No Content
 
- 
-# Parte 2 – Segurança com JWT
+## Parte 2 – Segurança com JWT
 
 Sua API deverá utilizar autenticação baseada em JWT (JSON Web Token). Na documentação explique:
 
@@ -57,21 +57,17 @@ Informações armazenadas no token: Por exemplo ID do usuário; Nome; Perfil; Da
 Política de expiração: Informe o tempo de validade do token. Por exemplo 30 minutos; 1 hora; 24 horas.
 Justifique sua escolha.
 
- 
-
-Parte 3 – Controle de acesso (RBAC)
+## Parte 3 – Controle de acesso (RBAC)
 
 A aplicação deverá possuir três perfis de usuário:
 
-1) Administrador: Possui acesso total ao sistema. Por exemplo: Criar usuários; editar usuários; excluir usuários; consultar usuários.
+1. Administrador: Possui acesso total ao sistema. Por exemplo: Criar usuários; editar usuários; excluir usuários; consultar usuários.
 
-2) Operador: Possui acesso intermediário. Por exemplo: Consultar usuários; atualizar informações.
+2. Operador: Possui acesso intermediário. Por exemplo: Consultar usuários; atualizar informações.
 
-3) Cliente: Possui acesso restrito. Por exemplo: Visualizar apenas seus próprios dados.
+3. Cliente: Possui acesso restrito. Por exemplo: Visualizar apenas seus próprios dados.
 
 Importante! Os endpoints devem ser protegidos por regras de autorização. Isso significa que nem todos os usuários poderão acessar todas as funcionalidades.
-
- 
 
 Parte 4 – OAuth 2.0
 
@@ -79,15 +75,13 @@ Na documentação, explique como uma aplicação parceira poderia acessar sua AP
 
 Sua explicação deve contemplar:
 
-1) Concessão de acesso: Como o usuário autoriza o acesso.
+1. Concessão de acesso: Como o usuário autoriza o acesso.
 
-2) Utilização de tokens: Como o token é utilizado para acessar recursos protegidos.
+2. Utilização de tokens: Como o token é utilizado para acessar recursos protegidos.
 
-3) Benefícios: Explique vantagens como maior segurança; delegação de permissões; não compartilhamento de senhas.
+3. Benefícios: Explique vantagens como maior segurança; delegação de permissões; não compartilhamento de senhas.
 
 Observação: não é necessário implementar OAuth 2.0. Basta explicar seu funcionamento no contexto da solução proposta.
-
- 
 
 Parte 5 – Análise de Segurança
 
@@ -111,9 +105,7 @@ Acesso indevido a endpoints
 
 Implementar RBAC
 
- 
-
-1) Front-end: Além da API, desenvolva uma interface web simples para demonstrar o funcionamento da solução. A interface pode conter:
+1. Front-end: Além da API, desenvolva uma interface web simples para demonstrar o funcionamento da solução. A interface pode conter:
 
 Tela de login;
 Listagem de usuários;
@@ -123,10 +115,7 @@ Exclusão de usuários;
 Exibição das respostas da API.
 O objetivo do front-end é permitir que o professor visualize e teste as funcionalidades desenvolvidas.
 
- 
-
-2) Tecnologias sugeridas: Você pode utilizar as tecnologias de sua preferência. Exemplos:
-
+2. Tecnologias sugeridas: Você pode utilizar as tecnologias de sua preferência. Exemplos:
 
 a) Back-end
 
@@ -141,15 +130,12 @@ HTML, CSS e JavaScript;
 React;
 Angular;
 Vue.
- 
 
 c) Testes da API: Caso não desenvolva uma interface completa, você poderá utilizar ferramentas como:
 
 Postman;
 Insomnia.
 Entretanto, a entrega ideal é uma aplicação com interface web funcional.
-
- 
 
 O que você deve entregar
 
@@ -159,11 +145,8 @@ Código-fonte do projeto: Arquivos do back-end e do front-end.
 Documentação da API incluindo: Endpoints; Métodos HTTP; Códigos de resposta; Perfis de acesso; JWT; OAuth 2.0; Análise de segurança.
 Evidências de funcionamento apresentadas por meio de: Capturas de tela; Vídeo de demonstração; Link do projeto (quando disponível).
 Arquivo README, que deve explicar: Objetivo do projeto; Tecnologias utilizadas; Como instalar; Como executar; Como testar a aplicação.
- 
 
 Não é necessário publicar a aplicação na internet. Ela pode ser executada localmente e demonstrada por meio de capturas de tela, vídeo ou documentação.
-
- 
 
 Critérios de avaliação
 
