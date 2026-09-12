@@ -21,6 +21,16 @@ import (
 
 type MapaPermissoesType map[string]map[string]map[string]bool
 
+var permissoesFront = map[string][]string{
+	"admin":   {"home", "listar usuarios", "exibir usuarios", "editar usuarios", "novo usuario", "sobre"},
+	"usuario": {"home", "listar usuarios", "exibir usuarios", "sobre"},
+	"cliente": {"home", "sobre"},
+}
+
+func MapaPermissoesFrontMock() *map[string][]string {
+	return &permissoesFront
+}
+
 var permissoes = MapaPermissoesType{
 	"/usuarios": {
 		"GET":    {"admin": true, "usuario": true, "cliente": false},

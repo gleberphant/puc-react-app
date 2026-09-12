@@ -19,17 +19,23 @@ export default function App() {
   const [logado, setLogado] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState(null);
 
+  /** TODO:
+   *  criar um midleware para o roteador do front consultar o back se a rota é autorizada ao perfil
+   *  posso carregar o mapa de permissoes no FRONT ou então fazer uma consulta em cada rota
+   * */
+
   const logout = () => {
     fazerLogout();
     setLogado(false);
   };
 
   const login = (usuario) => {
+    console.log("App recebeu usuario, ", usuario);
     setUsuarioLogado(usuario);
     setLogado(true);
   };
 
-  if (logado || usuarioLogado != null)
+  if (logado && usuarioLogado != null)
     return (
       <BrowserRouter>
         <Routes>

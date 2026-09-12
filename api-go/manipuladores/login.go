@@ -62,5 +62,5 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 
 	// responde ao cliente
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(map[string]any{"usuario": usuarioLogado, "token": tokenString})
+	json.NewEncoder(res).Encode(map[string]any{"usuario": usuarioLogado, "token": tokenString, "permissoes": map[string][]string{}})
 }
