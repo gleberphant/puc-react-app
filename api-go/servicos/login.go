@@ -12,10 +12,10 @@ func VerificaLoginSenha(login string, senhaTexto string) (map[string]string, err
 	for _, usuario := range repositorios.RepositorioUsuariosMock() {
 		if usuario.Login == login && usuario.Senha == senha {
 			return map[string]string{
-				"Uid":    usuario.Uid,
-				"Nome":   usuario.Nome,
-				"Email":  usuario.Login,
-				"Perfil": usuario.Perfil,
+				"uid":    usuario.Uid,
+				"nome":   usuario.Nome,
+				"login":  usuario.Login,
+				"perfil": usuario.Perfil,
 			}, nil
 		}
 	}

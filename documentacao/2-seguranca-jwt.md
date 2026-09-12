@@ -1,25 +1,33 @@
 # Processo de login: Como o usuário envia suas credenciais?
-- Ao tentar acessar qualquer rota da aplicação sem um token de autenticação válido, o usuario é redirecionado para a tela de login
-- na tela de login o usuario preenche formulario de login e senha em página html e envia para o servidor 
-- os dados é enviado pelo método post em formato json
+
+- Ao acessar a aplicação, o app-react verifica a existência de um token JWT no localStorage;
+- se não houver token, a página de login é renderizada;
+- o usuário preenche login e senha e envia o formulário;
+- o frontend faz uma requisição POST para a rota /login do backend Go;
+- os dados são enviados em formato JSON.
 
 # Geração do token: Como o sistema cria o JWT após autenticação?
-- o backend na rota post /login recebe o json com as credenciais de autenticação (login e senha)
-- primeiro verifica a existencia do usuário pelo login
-- depois ele criptografa a senha e verifica sua validade 
-- sendo válido login e senha o backend gera o token jwt e devolver para o cliente
 
+- o backend recebe o JSON com login e senha;
+- valida as credenciais no serviço de autenticação;
+- se a autenticação for válida, gera um JWT usando a biblioteca jwt-go;
+- o token é assinado com uma chave secreta e retornado ao cliente.
 
-# Informações armazenadas no token: 
-- ID do usuário;
-- Nome; 
-- Perfil;
-- Data de emissão.
+# Quais Informações armazenadas no token?
+
+- uid;
+- login;
+- perfil;
+- data de emissão (iat);
+- data de expiração (exp).
 
 # Política de expiração: Informe o tempo de validade do token. ?
-- 1 hora;
 
+- 1 hora.
 
 # Justifique sua escolha.
 
- 
+- A expiração em 1 hora equilibra segurança e usabilidade;
+- reduz o tempo de risco caso o token seja vazado;
+- é uma política padrão e simples para aplicações web;
+- no projeto atual, essa política é funcional, mas pode ser melhorada com armazenamento do UID e uso de segredo em variável de ambiente.

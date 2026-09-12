@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gleberphant/puc-react-app/api-go/configs"
 	"github.com/gleberphant/puc-react-app/api-go/servicos"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -43,14 +44,15 @@ func LoginPost(res http.ResponseWriter, req *http.Request) {
 	// cria token jwt
 	tokenJwt := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"login":  requestBody.Login,
-			"perfil": "admin",
+			"uid":    usuarioLogado["uid"],
+			"login":  usuarioLogado["login"],
+			"perfil": usuarioLogado["perfil"],
 			"exp":    time.Now().Add(time.Hour).Unix(),
 			"iat":    time.Now().Unix(),
 		})
 
 	// transforma em strings
-	tokenString, err := tokenJwt.SignedString([]byte("minha-senha-secreta"))
+	tokenString, err := tokenJwt.SignedString([]byte(configs.JWTSECRET))
 	if err != nil {
 		log.Printf("Error: %s", err.Error())
 		res.WriteHeader(http.StatusInternalServerError)
