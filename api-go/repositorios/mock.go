@@ -23,10 +23,10 @@ type MapaPermissoesType map[string]map[string]map[string]bool
 
 var permissoes = MapaPermissoesType{
 	"/usuarios": {
-		"GET":    {"admin": true, "usuario": true, "cliente": true},
-		"POST":   {"admin": true, "usuario": true, "cliente": true},
-		"PUT":    {"admin": true, "usuario": true, "cliente": true},
-		"DELETE": {"admin": true, "usuario": true, "cliente": true},
+		"GET":    {"admin": true, "usuario": true, "cliente": false},
+		"POST":   {"admin": true, "usuario": false, "cliente": false},
+		"PUT":    {"admin": true, "usuario": false, "cliente": false},
+		"DELETE": {"admin": true, "usuario": false, "cliente": false},
 	},
 
 	"/login": {

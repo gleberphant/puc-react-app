@@ -1,8 +1,11 @@
 package intermediarios
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"path"
+	"strings"
 
 	"github.com/gleberphant/puc-react-app/api-go/configs"
 	"github.com/gleberphant/puc-react-app/api-go/repositorios"
@@ -44,8 +47,6 @@ func AuthMidleware(next http.Handler) http.Handler {
 			return
 		}
 
-		log.Printf("Usuario autorizado ")
-
 		// extrai claims e perfil
 
 		claims, ok := token.Claims.(jwt.MapClaims)
@@ -63,30 +64,45 @@ func AuthMidleware(next http.Handler) http.Handler {
 			return
 		}
 
-		log.Printf("Perfil logado %s", perfil)
+		rotasPermitidas := *repositorios.MapaPermissoesMock()
 
-		permissoes := *repositorios.MapaPermissoesMock()
+		var rota string
 
-		rota, ok := permissoes[req.URL.Path]
+		if strings.Count(req.URL.Path, "/") > 1 {
+			rota = path.Dir(req.URL.Path)
+		} else {
+			rota = req.URL.Path
+		}
+
+		// for key := range rotasPermitidas {
+		// 	if strings.HasPrefix(req.URL.Path, key) {
+		// 		rotaBase = key
+		// 		break
+		// 	}
+		// }
+
+		metodosPermitidos, ok := rotasPermitidas[rota]
 		if !ok {
 			log.Printf("Rota não configurada no mapa de permissões: %s", req.URL.Path)
 			http.Error(res, "Rota não encontrada", http.StatusNotFound)
 			return
 		}
 
-		metodo, ok := rota[req.Method]
+		perfisPermitidos, ok := metodosPermitidos[req.Method]
 		if !ok {
 			log.Printf("Método %s não configurado para a rota %s", req.Method, req.URL.Path)
 			http.Error(res, "Método não permitido", http.StatusMethodNotAllowed)
 			return
 		}
 
-		autorizado, ok := metodo[perfil]
+		autorizado, ok := perfisPermitidos[perfil]
 
 		if !autorizado || !ok {
-			log.Printf("Perfil %s não autorizado para acessar %s [%s]", perfil, req.URL.Path, req.Method)
-			http.Error(res, "Perfil não autorizado", http.StatusForbidden)
+			log.Printf("Perfil %s não autorizado para %s [%s]", perfil, req.Method, req.URL.Path)
+			res.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(res).Encode(map[string]string{"error": "Perfil não autorizado"})
 			return
+
 		}
 
 		next.ServeHTTP(res, req)
